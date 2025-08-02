@@ -1,23 +1,29 @@
 import SwiftUI
 
 struct ResultView: View {
+    let mode: GameMode
     let score: Int
     let correctCount: Int
     let incorrectCount: Int?
+    let time: Int
     @Binding var currentScreen: AppScreen
     @State private var highScore: Int?
 
-    init(score: Int, correctCount: Int, incorrectCount: Int? = nil, currentScreen: Binding<AppScreen>) {
+    init(mode: GameMode, score: Int, correctCount: Int, incorrectCount: Int? = nil, time: Int = 0, currentScreen: Binding<AppScreen>) {
+        self.mode = mode
         self.score = score
         self.correctCount = correctCount
         self.incorrectCount = incorrectCount
+        self.time = time
         self._currentScreen = currentScreen
-        let saved = UserDefaults.standard.object(forKey: "HighScore") as? Int
-        if let saved, saved >= score {
-            _highScore = State(initialValue: saved)
-        } else {
-            UserDefaults.standard.set(score, forKey: "HighScore")
-            _highScore = State(initialValue: score)
+        if mode == .timeAttack {
+            let saved = UserDefaults.standard.object(forKey: "HighScore") as? Int
+            if let saved, saved >= score {
+                _highScore = State(initialValue: saved)
+            } else {
+                UserDefaults.standard.set(score, forKey: "HighScore")
+                _highScore = State(initialValue: score)
+            }
         }
     }
 
@@ -30,18 +36,29 @@ struct ResultView: View {
                     .font(.largeTitle)
 
                 VStack(spacing: 20) {
-                    Text("スコア: \(score)点")
-                        .font(.title2)
-                    Text("\(correctCount)問正解")
-                        .font(.title2)
-                    if let incorrectCount {
-                        Text("\(incorrectCount)問不正解")
+                    switch mode {
+                    case .timeAttack:
+                        Text("スコア: \(score)点")
                             .font(.title2)
-                    }
-                    if let highScore {
-                        Text("ハイスコア: \(highScore)点")
-                            .font(.title3)
-                            .padding(.top, 10)
+                        Text("\(correctCount)問正解")
+                            .font(.title2)
+                        if let incorrectCount {
+                            Text("\(incorrectCount)問不正解")
+                                .font(.title2)
+                        }
+                        if let highScore {
+                            Text("ハイスコア: \(highScore)点")
+                                .font(.title3)
+                                .padding(.top, 10)
+                        }
+                    case .correctCount:
+                        Text("\(correctCount)問正解")
+                            .font(.title2)
+                        Text("時間: \(time)秒")
+                            .font(.title2)
+                    case .noMistake:
+                        Text("\(correctCount)問正解")
+                            .font(.title2)
                     }
                 }
 
@@ -64,6 +81,6 @@ struct ResultView: View {
 }
 
 #Preview {
-    ResultView(score: 120, correctCount: 15, incorrectCount: 3, currentScreen: .constant(AppScreen.result))
+    ResultView(mode: .timeAttack, score: 120, correctCount: 15, incorrectCount: 3, time: 30, currentScreen: .constant(AppScreen.result))
 }
 
