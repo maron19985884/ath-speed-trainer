@@ -59,6 +59,13 @@ struct GameScene: View {
                 }
             }
             HStack(spacing: 10) {
+                Button(action: { viewModel.toggleSign() }) {
+                    Text("+/-")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                }
                 Button(action: { viewModel.enterDigit(0) }) {
                     Text("0")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
