@@ -5,8 +5,8 @@ struct GameScene: View {
     @Binding var currentScreen: AppScreen
     @StateObject private var viewModel: GameSceneViewModel
 
-    init(difficulty: Difficulty, currentScreen: Binding<AppScreen>) {
-        _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty))
+    init(difficulty: Difficulty, currentScreen: Binding<AppScreen>, onGameEnd: @escaping (Int, Int, Int) -> Void) {
+        _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty, onGameEnd: onGameEnd))
         self._currentScreen = currentScreen
     }
 
@@ -78,5 +78,5 @@ struct GameScene: View {
 }
 
 #Preview {
-    GameScene(difficulty: .easy, currentScreen: .constant(.game))
+    GameScene(difficulty: .easy, currentScreen: .constant(.game), onGameEnd: { _,_,_ in })
 }
