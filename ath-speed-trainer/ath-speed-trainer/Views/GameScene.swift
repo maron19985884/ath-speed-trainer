@@ -80,12 +80,12 @@ struct GameScene: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
                 }
-                Button("Enter") { viewModel.submit() }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding()
-                    .background(Color.blue.opacity(0.2))
-                    .cornerRadius(8)
             }
+            Button("Enter") { viewModel.submit() }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue.opacity(0.2))
+                .cornerRadius(8)
         }
         .frame(maxWidth: 200)
     }
