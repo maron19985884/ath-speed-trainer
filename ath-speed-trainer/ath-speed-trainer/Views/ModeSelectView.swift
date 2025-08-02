@@ -29,7 +29,12 @@ struct ModeSelectView: View {
     }
 
     private func modeButton(title: String, mode: GameMode) -> some View {
-        Button(action: { selectedMode = mode }) {
+        Button(action: {
+            selectedMode = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                selectedMode = mode
+            }
+        }) {
             Text(title)
                 .font(.title2)
                 .frame(maxWidth: .infinity)
