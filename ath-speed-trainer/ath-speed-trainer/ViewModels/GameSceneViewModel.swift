@@ -50,10 +50,22 @@ final class GameSceneViewModel: ObservableObject {
         userInput.append(String(digit))
     }
 
+    func toggleSign() {
+        guard timeRemaining > 0 else { return }
+        if userInput.hasPrefix("-") {
+            userInput.removeFirst()
+        } else if !userInput.isEmpty {
+            userInput = "-" + userInput
+        }
+    }
+
     func deleteLastDigit() {
         guard timeRemaining > 0 else { return }
         guard !userInput.isEmpty else { return }
         userInput.removeLast()
+        if userInput == "-" {
+            userInput = ""
+        }
     }
 
     func submit() {
