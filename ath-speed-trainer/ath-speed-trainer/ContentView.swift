@@ -34,7 +34,7 @@ struct ContentView: View {
             )
 
         case .game:
-            GameScene(difficulty: selectedDifficulty ?? .easy)
+            GameScene(difficulty: selectedDifficulty ?? .easy, currentScreen: $currentScreen)
 
         case .result:
             // TODO: 実装予定のリザルト画面

@@ -2,14 +2,21 @@ import SwiftUI
 import AVFoundation
 
 struct GameScene: View {
+    @Binding var currentScreen: AppScreen
     @StateObject private var viewModel: GameSceneViewModel
 
-    init(difficulty: Difficulty) {
+    init(difficulty: Difficulty, currentScreen: Binding<AppScreen>) {
         _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty))
+        self._currentScreen = currentScreen
     }
 
     var body: some View {
         VStack(spacing: 20) {
+            BackButton {
+                viewModel.stopGame()
+                currentScreen = .difficultySelect
+            }
+
             HStack {
                 Text("Score: \(viewModel.score)")
                 Spacer()
@@ -71,5 +78,5 @@ struct GameScene: View {
 }
 
 #Preview {
-    GameScene(difficulty: .easy)
+    GameScene(difficulty: .easy, currentScreen: .constant(.game))
 }
