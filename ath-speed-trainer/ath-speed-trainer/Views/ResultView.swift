@@ -22,47 +22,41 @@ struct ResultView: View {
     }
 
     var body: some View {
-        VStack(spacing: 40) {
-            Text("結果発表")
-                .font(.largeTitle)
-                .padding(.top, 40)
+        VStack(spacing: 20) {
+            BackButton { currentScreen = .modeSelect }
 
-            VStack(spacing: 20) {
-                Text("スコア: \(score)点")
-                    .font(.title2)
-                Text("\(correctCount)問正解")
-                    .font(.title2)
-                if let incorrectCount {
-                    Text("\(incorrectCount)問不正解")
+            VStack(spacing: 40) {
+                Text("結果発表")
+                    .font(.largeTitle)
+
+                VStack(spacing: 20) {
+                    Text("スコア: \(score)点")
                         .font(.title2)
+                    Text("\(correctCount)問正解")
+                        .font(.title2)
+                    if let incorrectCount {
+                        Text("\(incorrectCount)問不正解")
+                            .font(.title2)
+                    }
+                    if let highScore {
+                        Text("ハイスコア: \(highScore)点")
+                            .font(.title3)
+                            .padding(.top, 10)
+                    }
                 }
-                if let highScore {
-                    Text("ハイスコア: \(highScore)点")
-                        .font(.title3)
-                        .padding(.top, 10)
-                }
-            }
 
-            VStack(spacing: 20) {
-                Button("もう一度プレイ") {
-                    currentScreen = .game
+                VStack(spacing: 20) {
+                    Button("もう一度プレイ") {
+                        currentScreen = .game
+                    }
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue.opacity(0.2))
+                    .cornerRadius(8)
                 }
-                .font(.title2)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.blue.opacity(0.2))
-                .cornerRadius(8)
-
-                Button("モード選択へ戻る") {
-                    currentScreen = .modeSelect
-                }
-                .font(.title2)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
+                .padding(.horizontal, 40)
             }
-            .padding(.horizontal, 40)
 
             Spacer()
         }
