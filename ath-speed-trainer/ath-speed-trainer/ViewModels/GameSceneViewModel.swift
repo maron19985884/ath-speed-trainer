@@ -2,7 +2,7 @@ import SwiftUI
 import AVFoundation
 
 final class GameSceneViewModel: ObservableObject {
-    @Published var problem: ArithmeticProblem = ProblemGenerator.generate()
+    @Published var problem: ArithmeticProblem
     @Published var userInput: String = ""
     @Published var score: Int = 0
     @Published var timeRemaining: Int = 30
@@ -10,7 +10,13 @@ final class GameSceneViewModel: ObservableObject {
 
     enum Feedback { case correct, wrong }
 
+    private let difficulty: Difficulty
     private var timer: Timer?
+
+    init(difficulty: Difficulty) {
+        self.difficulty = difficulty
+        self.problem = ProblemGenerator.generate(difficulty: difficulty, score: 0)
+    }
 
     func startGame() {
         timer?.invalidate()
@@ -18,7 +24,7 @@ final class GameSceneViewModel: ObservableObject {
         score = 0
         userInput = ""
         feedback = nil
-        problem = ProblemGenerator.generate()
+        problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self else { return }
             self.timeRemaining -= 1
@@ -45,7 +51,7 @@ final class GameSceneViewModel: ObservableObject {
             timeRemaining += 2
             feedback = .correct
             AudioServicesPlaySystemSound(1057)
-            problem = ProblemGenerator.generate()
+            problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
             userInput = ""
         } else {
             score -= 5

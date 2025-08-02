@@ -2,7 +2,11 @@ import SwiftUI
 import AVFoundation
 
 struct GameScene: View {
-    @StateObject private var viewModel = GameSceneViewModel()
+    @StateObject private var viewModel: GameSceneViewModel
+
+    init(difficulty: Difficulty) {
+        _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty))
+    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -67,5 +71,5 @@ struct GameScene: View {
 }
 
 #Preview {
-    GameScene()
+    GameScene(difficulty: .easy)
 }
