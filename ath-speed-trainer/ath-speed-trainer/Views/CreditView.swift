@@ -1,7 +1,5 @@
 import SwiftUI
 
-typealias AppScreen = ContentView.AppScreen
-
 struct CreditView: View {
     @Binding var currentScreen: AppScreen
 
@@ -49,6 +47,6 @@ struct CreditView: View {
 }
 
 #Preview {
-    CreditView(currentScreen: .constant(.setting))
+    CreditView(currentScreen: .constant(AppScreen.setting))
 }
 

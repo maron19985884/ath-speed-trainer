@@ -1,7 +1,5 @@
 import SwiftUI
 
-typealias AppScreen = ContentView.AppScreen
-
 struct ResultView: View {
     let score: Int
     let correctCount: Int
@@ -72,6 +70,6 @@ struct ResultView: View {
 }
 
 #Preview {
-    ResultView(score: 120, correctCount: 15, incorrectCount: 3, currentScreen: .constant(.result))
+    ResultView(score: 120, correctCount: 15, incorrectCount: 3, currentScreen: .constant(AppScreen.result))
 }
 
