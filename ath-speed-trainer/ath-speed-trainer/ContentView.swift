@@ -22,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         switch currentScreen {
         case .modeSelect:
-            ModeSelectView(selectedMode: $selectedMode)
+            ModeSelectView(currentScreen: $currentScreen, selectedMode: $selectedMode)
                 .onChange(of: selectedMode) { _, newValue in
                     if newValue != nil {
                         currentScreen = .difficultySelect
