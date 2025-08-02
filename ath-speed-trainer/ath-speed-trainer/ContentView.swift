@@ -33,6 +33,7 @@ struct ContentView: View {
             DifficultySelectView(
                 selectedDifficulty: $selectedDifficulty,
                 selectedStyle: $selectedStyle,
+                currentScreen: $currentScreen,
                 startGame: {
                     currentScreen = .game
                 }

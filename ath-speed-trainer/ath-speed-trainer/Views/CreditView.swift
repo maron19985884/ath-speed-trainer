@@ -5,7 +5,15 @@ struct CreditView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            BackButton { currentScreen = .setting }
+            HStack {
+                Button("メニューに戻る") {
+                    currentScreen = .modeSelect
+                }
+                .font(.title3)
+                Spacer()
+            }
+            .padding(.top, 16)
+            .padding(.leading, 16)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
@@ -40,6 +48,6 @@ struct CreditView: View {
 }
 
 #Preview {
-    CreditView(currentScreen: .constant(AppScreen.setting))
+    CreditView(currentScreen: .constant(AppScreen.modeSelect))
 }
 
