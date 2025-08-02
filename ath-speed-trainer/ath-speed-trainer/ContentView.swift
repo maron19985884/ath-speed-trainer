@@ -14,6 +14,11 @@ struct ContentView: View {
     /// 選択された出題形式
     @State private var selectedStyle: QuestionStyle?
 
+    /// ゲーム結果
+    @State private var finalScore: Int = 0
+    @State private var correctCount: Int = 0
+    @State private var incorrectCount: Int = 0
+
     var body: some View {
         switch currentScreen {
         case .modeSelect:
@@ -34,11 +39,24 @@ struct ContentView: View {
             )
 
         case .game:
-            GameScene(difficulty: selectedDifficulty ?? .easy, currentScreen: $currentScreen)
+            GameScene(
+                difficulty: selectedDifficulty ?? .easy,
+                currentScreen: $currentScreen,
+                onGameEnd: { score, correct, incorrect in
+                    finalScore = score
+                    correctCount = correct
+                    incorrectCount = incorrect
+                    currentScreen = .result
+                }
+            )
 
         case .result:
-            // TODO: 実装予定のリザルト画面
-            Text("ResultView")
+            ResultView(
+                score: finalScore,
+                correctCount: correctCount,
+                incorrectCount: incorrectCount,
+                currentScreen: $currentScreen
+            )
 
         case .setting:
             SettingView(currentScreen: $currentScreen)
