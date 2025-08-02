@@ -1,7 +1,5 @@
 import SwiftUI
 
-typealias AppScreen = ContentView.AppScreen
-
 struct SettingView: View {
     @Binding var currentScreen: AppScreen
     @AppStorage("isBgmOn") private var isBgmOn: Bool = true
@@ -37,5 +35,5 @@ struct SettingView: View {
 }
 
 #Preview {
-    SettingView(currentScreen: .constant(.modeSelect))
+    SettingView(currentScreen: .constant(AppScreen.modeSelect))
 }

@@ -2,14 +2,6 @@ import SwiftUI
 
 /// アプリ全体の画面遷移を管理するトップレベルビュー
 struct ContentView: View {
-    /// 表示する画面の種類
-    enum AppScreen {
-        case modeSelect
-        case difficultySelect
-        case game
-        case result
-    }
-
     /// 現在表示中の画面
     @State private var currentScreen: AppScreen = .modeSelect
 
@@ -47,6 +39,12 @@ struct ContentView: View {
         case .result:
             // TODO: 実装予定のリザルト画面
             Text("ResultView")
+
+        case .setting:
+            SettingView(currentScreen: $currentScreen)
+
+        case .credit:
+            CreditView(currentScreen: $currentScreen)
         }
     }
 }
