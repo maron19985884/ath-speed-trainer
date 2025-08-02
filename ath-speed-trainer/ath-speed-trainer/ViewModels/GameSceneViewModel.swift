@@ -50,6 +50,12 @@ final class GameSceneViewModel: ObservableObject {
         userInput.append(String(digit))
     }
 
+    func deleteLastDigit() {
+        guard timeRemaining > 0 else { return }
+        guard !userInput.isEmpty else { return }
+        userInput.removeLast()
+    }
+
     func submit() {
         guard timeRemaining > 0 else { return }
         guard let value = Int(userInput) else { return }
