@@ -3,6 +3,7 @@ import SwiftUI
 struct DifficultySelectView: View {
     @Binding var selectedDifficulty: Difficulty?
     @Binding var selectedStyle: QuestionStyle?
+    @Binding var currentScreen: AppScreen
     var startGame: () -> Void
 
     var body: some View {
@@ -43,6 +44,16 @@ struct DifficultySelectView: View {
             .padding(.horizontal, 40)
 
             Spacer()
+
+            Button("メニューに戻る") {
+                currentScreen = .modeSelect
+            }
+            .font(.title2)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(8)
+            .padding(.horizontal, 40)
         }
     }
 
@@ -70,6 +81,11 @@ struct DifficultySelectView: View {
 }
 
 #Preview {
-    DifficultySelectView(selectedDifficulty: .constant(.easy), selectedStyle: .constant(.single), startGame: {})
+    DifficultySelectView(
+        selectedDifficulty: .constant(.easy),
+        selectedStyle: .constant(.single),
+        currentScreen: .constant(.modeSelect),
+        startGame: {}
+    )
 }
 
