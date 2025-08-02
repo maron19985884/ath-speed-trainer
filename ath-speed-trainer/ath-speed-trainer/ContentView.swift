@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var finalScore: Int = 0
     @State private var correctCount: Int = 0
     @State private var incorrectCount: Int = 0
+    @State private var elapsedTime: Int = 0
 
     var body: some View {
         switch currentScreen {
@@ -42,20 +43,24 @@ struct ContentView: View {
         case .game:
             GameScene(
                 difficulty: selectedDifficulty ?? .easy,
+                mode: selectedMode ?? .timeAttack,
                 currentScreen: $currentScreen,
-                onGameEnd: { score, correct, incorrect in
+                onGameEnd: { score, correct, incorrect, time in
                     finalScore = score
                     correctCount = correct
-                    incorrectCount = incorrect
+                    incorrectCount = incorrect ?? 0
+                    elapsedTime = time
                     currentScreen = .result
                 }
             )
 
         case .result:
             ResultView(
+                mode: selectedMode ?? .timeAttack,
                 score: finalScore,
                 correctCount: correctCount,
-                incorrectCount: incorrectCount,
+                incorrectCount: selectedMode == .timeAttack ? incorrectCount : nil,
+                time: elapsedTime,
                 currentScreen: $currentScreen
             )
 

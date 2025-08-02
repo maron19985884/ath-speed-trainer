@@ -13,7 +13,7 @@ struct ModeSelectView: View {
             VStack(spacing: 20) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
                 modeButton(title: "正解数チャレンジ", mode: .correctCount)
-                modeButton(title: "ミス耐久", mode: .suddenDeath)
+                modeButton(title: "ミス耐久", mode: .noMistake)
             }
             .padding(.horizontal, 40)
 
