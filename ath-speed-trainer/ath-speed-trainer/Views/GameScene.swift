@@ -66,6 +66,13 @@ struct GameScene: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
                 }
+                Button(action: { viewModel.deleteLastDigit() }) {
+                    Image(systemName: "delete.left")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                }
                 Button("Enter") { viewModel.submit() }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding()
