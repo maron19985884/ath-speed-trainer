@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ModeSelectView: View {
+    @Binding var currentScreen: AppScreen
     @Binding var selectedMode: GameMode?
 
     var body: some View {
@@ -17,6 +18,13 @@ struct ModeSelectView: View {
             .padding(.horizontal, 40)
 
             Spacer()
+
+            VStack(spacing: 20) {
+                menuButton(title: "設定", screen: .setting)
+                menuButton(title: "クレジット", screen: .credit)
+            }
+            .padding(.horizontal, 40)
+            .padding(.bottom, 40)
         }
     }
 
@@ -30,9 +38,20 @@ struct ModeSelectView: View {
                 .cornerRadius(8)
         }
     }
+
+    private func menuButton(title: String, screen: AppScreen) -> some View {
+        Button(action: { currentScreen = screen }) {
+            Text(title)
+                .font(.title3)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+        }
+    }
 }
 
 #Preview {
-    ModeSelectView(selectedMode: .constant(nil))
+    ModeSelectView(currentScreen: .constant(.modeSelect), selectedMode: .constant(nil))
 }
 
