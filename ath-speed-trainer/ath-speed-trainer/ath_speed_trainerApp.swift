@@ -11,7 +11,7 @@ import SwiftUI
 struct ath_speed_trainerApp: App {
     var body: some Scene {
         WindowGroup {
-            GameScene()
+            ContentView()
         }
     }
 }
