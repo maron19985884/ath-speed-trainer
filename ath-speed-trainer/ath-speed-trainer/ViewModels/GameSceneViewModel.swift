@@ -10,6 +10,8 @@ final class GameSceneViewModel: ObservableObject {
     @Published var correctCount: Int = 0
     @Published var incorrectCount: Int = 0
     @Published var answeredCount: Int = 0
+    @Published var scoreDelta: Int? = nil
+    @Published var timeDelta: Int? = nil
 
     enum Feedback { case correct, wrong }
 
@@ -100,6 +102,15 @@ final class GameSceneViewModel: ObservableObject {
         }
     }
 
+    private func clearDeltasAfterDelay() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            withAnimation {
+                self.scoreDelta = nil
+                self.timeDelta = nil
+            }
+        }
+    }
+
     func submit() {
         guard canInput() else { return }
         guard let value = Int(userInput) else { return }
@@ -109,15 +120,24 @@ final class GameSceneViewModel: ObservableObject {
             correctCount += 1
             AudioServicesPlaySystemSound(1057)
             if mode == .timeAttack {
-                score += 10
-                timeRemaining += 2
+                withAnimation {
+                    score += 10
+                    timeRemaining += 2
+                    scoreDelta = 10
+                    timeDelta = 2
+                }
+                clearDeltasAfterDelay()
             }
         } else {
             feedback = .wrong
             incorrectCount += 1
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             if mode == .timeAttack {
-                score -= 5
+                withAnimation {
+                    score -= 5
+                    scoreDelta = -5
+                }
+                clearDeltasAfterDelay()
             } else if mode == .noMistake {
                 endGame()
                 userInput = ""
