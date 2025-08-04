@@ -36,9 +36,12 @@ struct ContentView: View {
                 selectedStyle: $selectedStyle,
                 currentScreen: $currentScreen,
                 startGame: {
-                    currentScreen = .game
+                    currentScreen = .ready
                 }
             )
+
+        case .ready:
+            ReadyCountdownView(currentScreen: $currentScreen)
 
         case .game:
             GameScene(
