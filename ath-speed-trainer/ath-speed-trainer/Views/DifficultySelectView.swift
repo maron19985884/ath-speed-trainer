@@ -48,12 +48,13 @@ struct DifficultySelectView: View {
             Button("メニューに戻る") {
                 currentScreen = .modeSelect
             }
-            .font(.title2)
+            .font(.title3)
             .frame(maxWidth: .infinity)
             .padding()
             .background(Color.gray.opacity(0.2))
             .cornerRadius(8)
             .padding(.horizontal, 40)
+            .padding(.bottom, 40)
         }
     }
 
