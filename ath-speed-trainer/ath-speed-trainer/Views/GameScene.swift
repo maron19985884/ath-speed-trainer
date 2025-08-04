@@ -4,6 +4,8 @@ import AVFoundation
 struct GameScene: View {
     @Binding var currentScreen: AppScreen
     @StateObject private var viewModel: GameSceneViewModel
+    @State private var showPauseMenu = false
+    @State private var countdown: Int = 0
 
     init(difficulty: Difficulty, mode: GameMode, currentScreen: Binding<AppScreen>, onGameEnd: @escaping (Int, Int, Int?, Int) -> Void) {
         _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty, mode: mode, onGameEnd: onGameEnd))
@@ -11,51 +13,96 @@ struct GameScene: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
-            BackButton {
-                viewModel.stopGame()
-                currentScreen = .difficultySelect
+        ZStack {
+            VStack(spacing: 20) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Score: \(viewModel.score)")
+                        if let delta = viewModel.scoreDelta {
+                            Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
+                                .foregroundColor(delta > 0 ? .green : .red)
+                                .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut, value: viewModel.scoreDelta)
+
+                    Spacer()
+
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("Time: \(viewModel.timeRemaining)")
+                        if let delta = viewModel.timeDelta {
+                            Text("+\(delta)秒")
+                                .foregroundColor(.green)
+                                .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut, value: viewModel.timeDelta)
+                }
+                .font(.title2)
+                .padding()
+
+                Text(viewModel.problem.question)
+                    .font(.largeTitle)
+
+                if let feedback = viewModel.feedback {
+                    Image(systemName: feedback == .correct ? "checkmark.circle" : "xmark.circle")
+                        .foregroundColor(feedback == .correct ? .green : .red)
+                        .font(.system(size: 50))
+                }
+
+                Text(viewModel.userInput)
+                    .font(.title)
+
+                keypad
+            }
+            .blur(radius: (showPauseMenu || countdown > 0) ? 3 : 0)
+
+            if !viewModel.isPaused && countdown == 0 {
+                VStack {
+                    HStack {
+                        Button(action: {
+                            viewModel.pauseGame()
+                            showPauseMenu = true
+                        }) {
+                            Image(systemName: "pause.circle")
+                                .font(.title)
+                        }
+                        .padding(.top, 16)
+                        .padding(.leading, 16)
+                        Spacer()
+                    }
+                    Spacer()
+                }
             }
 
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Score: \(viewModel.score)")
-                    if let delta = viewModel.scoreDelta {
-                        Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
-                            .foregroundColor(delta > 0 ? .green : .red)
-                            .transition(.opacity)
+            if showPauseMenu {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                VStack(spacing: 20) {
+                    Button("再開") {
+                        startCountdown()
+                    }
+                    Button("リセット") {
+                        viewModel.startGame()
+                        showPauseMenu = false
+                    }
+                    Button("メニューに戻る") {
+                        viewModel.stopGame()
+                        currentScreen = .modeSelect
                     }
                 }
-                .animation(.easeInOut, value: viewModel.scoreDelta)
-
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("Time: \(viewModel.timeRemaining)")
-                    if let delta = viewModel.timeDelta {
-                        Text("+\(delta)秒")
-                            .foregroundColor(.green)
-                            .transition(.opacity)
-                    }
-                }
-                .animation(.easeInOut, value: viewModel.timeDelta)
-            }
-            .font(.title2)
-            .padding()
-
-            Text(viewModel.problem.question)
-                .font(.largeTitle)
-
-            if let feedback = viewModel.feedback {
-                Image(systemName: feedback == .correct ? "checkmark.circle" : "xmark.circle")
-                    .foregroundColor(feedback == .correct ? .green : .red)
-                    .font(.system(size: 50))
+                .padding()
+                .background(Color.white)
+                .cornerRadius(12)
             }
 
-            Text(viewModel.userInput)
-                .font(.title)
-
-            keypad
+            if countdown > 0 {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                Text("\(countdown)")
+                    .font(.system(size: 60))
+                    .foregroundColor(.white)
+            }
         }
         .onAppear { viewModel.startGame() }
     }
@@ -115,6 +162,18 @@ struct GameScene: View {
                     .cornerRadius(8)
             }
             .contentShape(Rectangle())
+        }
+    }
+
+    private func startCountdown() {
+        countdown = 3
+        showPauseMenu = false
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            countdown -= 1
+            if countdown == 0 {
+                timer.invalidate()
+                viewModel.resumeGame()
+            }
         }
     }
 }

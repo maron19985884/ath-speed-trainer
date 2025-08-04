@@ -12,6 +12,7 @@ final class GameSceneViewModel: ObservableObject {
     @Published var answeredCount: Int = 0
     @Published var scoreDelta: Int? = nil
     @Published var timeDelta: Int? = nil
+    @Published var isPaused: Bool = false
 
     enum Feedback { case correct, wrong }
 
@@ -38,11 +39,23 @@ final class GameSceneViewModel: ObservableObject {
         incorrectCount = 0
         answeredCount = 0
         isGameOver = false
+        isPaused = false
         problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
 
         switch mode {
         case .timeAttack:
             timeRemaining = 30
+        case .correctCount, .noMistake:
+            timeRemaining = 0
+        }
+
+        startTimer()
+    }
+
+    private func startTimer() {
+        timer?.invalidate()
+        switch mode {
+        case .timeAttack:
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
                 guard let self else { return }
                 self.timeRemaining -= 1
@@ -51,7 +64,6 @@ final class GameSceneViewModel: ObservableObject {
                 }
             }
         case .correctCount, .noMistake:
-            timeRemaining = 0
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
                 self?.timeRemaining += 1
             }
@@ -71,6 +83,7 @@ final class GameSceneViewModel: ObservableObject {
     }
 
     private func canInput() -> Bool {
+        guard !isPaused else { return false }
         switch mode {
         case .timeAttack:
             return timeRemaining > 0
@@ -158,5 +171,15 @@ final class GameSceneViewModel: ObservableObject {
         } else if mode == .noMistake && feedback == .correct {
             problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
         }
+    }
+
+    func pauseGame() {
+        timer?.invalidate()
+        isPaused = true
+    }
+
+    func resumeGame() {
+        isPaused = false
+        startTimer()
     }
 }
