@@ -18,9 +18,27 @@ struct GameScene: View {
             }
 
             HStack {
-                Text("Score: \(viewModel.score)")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Score: \(viewModel.score)")
+                    if let delta = viewModel.scoreDelta {
+                        Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
+                            .foregroundColor(delta > 0 ? .green : .red)
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.easeInOut, value: viewModel.scoreDelta)
+
                 Spacer()
-                Text("Time: \(viewModel.timeRemaining)")
+
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Time: \(viewModel.timeRemaining)")
+                    if let delta = viewModel.timeDelta {
+                        Text("+\(delta)秒")
+                            .foregroundColor(.green)
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.easeInOut, value: viewModel.timeDelta)
             }
             .font(.title2)
             .padding()
