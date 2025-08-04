@@ -6,7 +6,7 @@ struct BackButton: View {
     var body: some View {
         HStack {
             Button(action: action) {
-                Text("\uFF1C\u623B\u308B")
+                Text("＜戻る") // ← 直接文字列で記述
                     .font(.title3)
                     .padding(8)
                     .background(Color.gray.opacity(0.2))
