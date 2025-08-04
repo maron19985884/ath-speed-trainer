@@ -63,7 +63,7 @@ struct ResultView: View {
                 }
 
                 VStack(spacing: 20) {
-                    Button(action: { currentScreen = .game }) {
+                    Button(action: { currentScreen = .ready }) {
                         Text("もう一度プレイ")
                             .font(.title2)
                             .frame(maxWidth: .infinity)
