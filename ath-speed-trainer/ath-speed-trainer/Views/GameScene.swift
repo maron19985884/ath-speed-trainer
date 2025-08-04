@@ -44,50 +44,60 @@ struct GameScene: View {
 
     private var keypad: some View {
         VStack(spacing: 10) {
-            ForEach(0..<3, id: \.self) { row in
-                HStack(spacing: 10) {
-                    ForEach(1...3, id: \.self) { col in
-                        let number = row * 3 + col
-                        Button(action: { viewModel.enterDigit(number) }) {
-                            Text("\(number)")
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(8)
+            VStack(spacing: 10) {
+                ForEach(0..<3, id: \.self) { row in
+                    HStack(spacing: 10) {
+                        ForEach(1...3, id: \.self) { col in
+                            let number = row * 3 + col
+                            Button(action: { viewModel.enterDigit(number) }) {
+                                Text("\(number)")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.2))
+                                    .cornerRadius(8)
+                            }
+                            .contentShape(Rectangle())
                         }
                     }
                 }
+                HStack(spacing: 10) {
+                    Button(action: { viewModel.toggleSign() }) {
+                        Text("+/-")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                    .contentShape(Rectangle())
+                    Button(action: { viewModel.enterDigit(0) }) {
+                        Text("0")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                    .contentShape(Rectangle())
+                    Button(action: { viewModel.deleteLastDigit() }) {
+                        Image(systemName: "delete.left")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                    .contentShape(Rectangle())
+                }
             }
-            HStack(spacing: 10) {
-                Button(action: { viewModel.toggleSign() }) {
-                    Text("+/-")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                }
-                Button(action: { viewModel.enterDigit(0) }) {
-                    Text("0")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                }
-                Button(action: { viewModel.deleteLastDigit() }) {
-                    Image(systemName: "delete.left")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                }
+            .frame(maxWidth: 200)
+
+            Button(action: { viewModel.submit() }) {
+                Text("Enter")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue.opacity(0.2))
+                    .cornerRadius(8)
             }
-            Button("Enter") { viewModel.submit() }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.blue.opacity(0.2))
-                .cornerRadius(8)
+            .contentShape(Rectangle())
         }
-        .frame(maxWidth: 200)
     }
 }
 

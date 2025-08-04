@@ -42,6 +42,7 @@ struct ModeSelectView: View {
                 .background(Color.blue.opacity(0.2))
                 .cornerRadius(8)
         }
+        .contentShape(Rectangle())
     }
 
     private func menuButton(title: String, screen: AppScreen) -> some View {
@@ -53,6 +54,7 @@ struct ModeSelectView: View {
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
         }
+        .contentShape(Rectangle())
     }
 }
 

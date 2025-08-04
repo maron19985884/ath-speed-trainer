@@ -63,14 +63,15 @@ struct ResultView: View {
                 }
 
                 VStack(spacing: 20) {
-                    Button("もう一度プレイ") {
-                        currentScreen = .game
+                    Button(action: { currentScreen = .game }) {
+                        Text("もう一度プレイ")
+                            .font(.title2)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue.opacity(0.2))
+                            .cornerRadius(8)
                     }
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue.opacity(0.2))
-                    .cornerRadius(8)
+                    .contentShape(Rectangle())
                 }
                 .padding(.horizontal, 40)
             }

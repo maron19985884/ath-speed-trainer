@@ -6,10 +6,14 @@ struct CreditView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
-                Button("メニューに戻る") {
-                    currentScreen = .modeSelect
+                Button(action: { currentScreen = .modeSelect }) {
+                    Text("メニューに戻る")
+                        .font(.title3)
+                        .padding(8)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
                 }
-                .font(.title3)
+                .contentShape(Rectangle())
                 Spacer()
             }
             .padding(.top, 16)

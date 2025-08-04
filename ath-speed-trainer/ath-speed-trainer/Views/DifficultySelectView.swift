@@ -41,18 +41,20 @@ struct DifficultySelectView: View {
                     .background(Color.blue.opacity(0.2))
                     .cornerRadius(8)
             }
+            .contentShape(Rectangle())
             .padding(.horizontal, 40)
 
             Spacer()
 
-            Button("メニューに戻る") {
-                currentScreen = .modeSelect
+            Button(action: { currentScreen = .modeSelect }) {
+                Text("メニューに戻る")
+                    .font(.title3)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
             }
-            .font(.title3)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(8)
+            .contentShape(Rectangle())
             .padding(.horizontal, 40)
             .padding(.bottom, 40)
         }
@@ -67,6 +69,7 @@ struct DifficultySelectView: View {
                 .background(selectedDifficulty == difficulty ? Color.blue.opacity(0.6) : Color.blue.opacity(0.2))
                 .cornerRadius(8)
         }
+        .contentShape(Rectangle())
     }
 
     private func styleButton(title: String, style: QuestionStyle) -> some View {
@@ -78,6 +81,7 @@ struct DifficultySelectView: View {
                 .background(selectedStyle == style ? Color.green.opacity(0.6) : Color.green.opacity(0.2))
                 .cornerRadius(8)
         }
+        .contentShape(Rectangle())
     }
 }
 
