@@ -7,7 +7,7 @@ struct ReadyCountdownView: View {
     /// 表示するテキストのインデックス
     @State private var index: Int = 0
     /// カウントダウンで表示する文字列
-    private let steps = ["3", "2", "1", "Start!"]
+    private let steps = ["3", "2", "1"]
 
     var body: some View {
         Text(steps[index])
