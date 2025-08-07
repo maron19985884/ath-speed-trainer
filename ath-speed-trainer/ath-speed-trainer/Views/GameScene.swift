@@ -63,11 +63,14 @@ struct GameScene: View {
                     .ignoresSafeArea()
                 VStack(spacing: 20) {
                     Button("再開") {
-                        startCountdown()
+                        startCountdown {
+                            viewModel.resumeGame()
+                        }
                     }
                     Button("リセット") {
-                        viewModel.startGame()
-                        showPauseMenu = false
+                        startCountdown {
+                            viewModel.startGame()
+                        }
                     }
                     Button("メニューに戻る") {
                         viewModel.stopGame()
@@ -148,14 +151,14 @@ struct GameScene: View {
         }
     }
 
-    private func startCountdown() {
+    private func startCountdown(completion: @escaping () -> Void) {
         countdown = 3
         showPauseMenu = false
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             countdown -= 1
             if countdown == 0 {
                 timer.invalidate()
-                viewModel.resumeGame()
+                completion()
             }
         }
     }
