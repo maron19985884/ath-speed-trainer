@@ -30,7 +30,15 @@ struct GameScene: View {
                     .padding(.top, 16)
 
                 HStack {
-                    Text("Score: \(viewModel.score)")
+                    if mode == .timeAttack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Score: \(viewModel.score)")
+                            if let delta = viewModel.scoreDelta {
+                                Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
+                                    .foregroundColor(delta > 0 ? .green : .red)
+                            }
+                        }
+                    }
                     Spacer()
                     Text("Time: \(viewModel.timeRemaining)")
                 }
