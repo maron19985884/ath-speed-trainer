@@ -14,6 +14,9 @@ final class GameSceneViewModel: ObservableObject {
     @Published var timeDelta: Int? = nil
     @Published var isPaused: Bool = false
 
+    @AppStorage("isSeOn") private var isSeOn: Bool = true
+    @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
+
     enum Feedback { case correct, wrong }
 
     private let difficulty: Difficulty
@@ -133,7 +136,9 @@ final class GameSceneViewModel: ObservableObject {
         if value == problem.answer {
             feedback = .correct
             correctCount += 1
-            AudioServicesPlaySystemSound(1057)
+            if isSeOn {
+                AudioServicesPlaySystemSound(1057)
+            }
             if mode == .timeAttack {
                 withAnimation {
                     score += 10
@@ -146,7 +151,9 @@ final class GameSceneViewModel: ObservableObject {
         } else {
             feedback = .wrong
             incorrectCount += 1
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            if isVibrationOn {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            }
             if mode == .timeAttack {
                 withAnimation {
                     score -= 5
