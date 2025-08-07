@@ -110,7 +110,19 @@ struct GameScene: View {
                     .font(.system(size: 60))
                     .foregroundColor(.white)
             }
+
+            if viewModel.showCombo {
+                Text("連続\(viewModel.comboCount)問正解！")
+                    .font(.title2)
+                    .foregroundColor(.orange)
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    .transition(.scale)
+                    .zIndex(1)
+            }
         }
+        .animation(.easeInOut, value: viewModel.comboCount)
         .onAppear { viewModel.startGame() }
     }
 

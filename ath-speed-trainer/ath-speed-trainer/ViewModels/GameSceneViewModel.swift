@@ -13,6 +13,8 @@ final class GameSceneViewModel: ObservableObject {
     @Published var scoreDelta: Int? = nil
     @Published var timeDelta: Int? = nil
     @Published var isPaused: Bool = false
+    @Published var comboCount: Int = 0
+    @Published var showCombo: Bool = false
 
     @AppStorage("isSeOn") private var isSeOn: Bool = true
     @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
@@ -41,6 +43,8 @@ final class GameSceneViewModel: ObservableObject {
         correctCount = 0
         incorrectCount = 0
         answeredCount = 0
+        comboCount = 0
+        showCombo = false
         isGameOver = false
         isPaused = false
         problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
@@ -139,6 +143,15 @@ final class GameSceneViewModel: ObservableObject {
                 AudioServicesPlaySystemSound(1057)
             }
             if mode == .timeAttack {
+                comboCount += 1
+                showCombo = comboCount >= 2
+                if showCombo {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        withAnimation {
+                            self.showCombo = false
+                        }
+                    }
+                }
                 withAnimation {
                     score += 10
                     timeRemaining += 2
@@ -146,6 +159,9 @@ final class GameSceneViewModel: ObservableObject {
                     timeDelta = 2
                 }
                 clearDeltasAfterDelay()
+            } else {
+                comboCount = 0
+                showCombo = false
             }
 
             answeredCount += 1
@@ -161,6 +177,8 @@ final class GameSceneViewModel: ObservableObject {
         } else {
             feedback = .wrong
             incorrectCount += 1
+            comboCount = 0
+            showCombo = false
             if isVibrationOn {
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             }
