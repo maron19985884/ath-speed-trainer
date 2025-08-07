@@ -188,6 +188,8 @@ final class GameSceneViewModel: ObservableObject {
                 withAnimation {
                     score -= 5
                     scoreDelta = -5
+                    timeRemaining -= 2
+                    timeDelta = -2
                 }
                 clearDeltasAfterDelay()
             } else if mode == .noMistake {
@@ -196,7 +198,6 @@ final class GameSceneViewModel: ObservableObject {
                 return
             }
 
-            // Do not change the problem; reset only user input and feedback
             userInput = ""
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                 self.feedback = nil
