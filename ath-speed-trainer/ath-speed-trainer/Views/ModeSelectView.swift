@@ -5,10 +5,15 @@ struct ModeSelectView: View {
     @Binding var selectedMode: GameMode?
 
     var body: some View {
-        VStack(spacing: 40) {
-            Text("モード選択")
+        VStack {
+            Text("Ath Speed Trainer")
                 .font(.largeTitle)
+                .bold()
                 .padding(.top, 40)
+
+            Text("モード選択")
+                .font(.title2)
+                .padding(.top, 10)
 
             VStack(spacing: 20) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
@@ -16,6 +21,7 @@ struct ModeSelectView: View {
                 modeButton(title: "ミス耐久", mode: .noMistake)
             }
             .padding(.horizontal, 40)
+            .padding(.top, 20)
 
             Spacer()
 
