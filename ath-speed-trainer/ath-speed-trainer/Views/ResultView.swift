@@ -64,8 +64,6 @@ struct ResultView: View {
                                 .padding(.top, 10)
                         }
                     case .correctCount:
-                        Text("\(correctCount)問正解")
-                            .font(.title2)
                         Text("時間: \(time)秒")
                             .font(.title2)
                     case .noMistake:
