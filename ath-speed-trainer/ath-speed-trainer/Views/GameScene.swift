@@ -169,6 +169,8 @@ struct GameScene: View {
                     .cornerRadius(8)
             }
             .contentShape(Rectangle())
+            .disabled(viewModel.userInput.isEmpty)
+            .opacity(viewModel.userInput.isEmpty ? 0.4 : 1.0)
         }
     }
 
