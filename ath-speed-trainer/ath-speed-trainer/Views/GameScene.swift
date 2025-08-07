@@ -3,25 +3,39 @@ import AVFoundation
 
 struct GameScene: View {
     @Binding var currentScreen: AppScreen
+    private let mode: GameMode
     @StateObject private var viewModel: GameSceneViewModel
     @State private var showPauseMenu = false
     @State private var countdown: Int = 0
 
     init(difficulty: Difficulty, mode: GameMode, currentScreen: Binding<AppScreen>, onGameEnd: @escaping (Int, Int, Int?, Int) -> Void) {
         _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty, mode: mode, onGameEnd: onGameEnd))
+        self.mode = mode
         self._currentScreen = currentScreen
+    }
+
+    private var modeLabel: String {
+        switch mode {
+        case .timeAttack: return "タイムアタック"
+        case .correctCount: return "正解数チャレンジ"
+        case .noMistake: return "ミス耐久"
+        }
     }
 
     var body: some View {
         ZStack {
             VStack(spacing: 20) {
+                Text(modeLabel)
+                    .font(.headline)
+                    .padding(.top, 16)
+
                 HStack {
                     Text("Score: \(viewModel.score)")
                     Spacer()
                     Text("Time: \(viewModel.timeRemaining)")
                 }
                 .font(.title2)
-                .padding(.top, 40)
+                .padding(.top, 8)
                 .padding(.horizontal)
 
                 Text(viewModel.problem.question)
