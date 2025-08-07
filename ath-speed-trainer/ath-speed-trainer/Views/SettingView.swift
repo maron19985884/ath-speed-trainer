@@ -4,6 +4,7 @@ struct SettingView: View {
     @Binding var currentScreen: AppScreen
     @AppStorage("isBgmOn") private var isBgmOn: Bool = true
     @AppStorage("isSeOn") private var isSeOn: Bool = true
+    @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
 
     var body: some View {
         VStack(spacing: 20) {
@@ -17,6 +18,8 @@ struct SettingView: View {
                     Toggle("BGM", isOn: $isBgmOn)
                         .font(.title2)
                     Toggle("効果音（SE）", isOn: $isSeOn)
+                        .font(.title2)
+                    Toggle("バイブレーション", isOn: $isVibrationOn)
                         .font(.title2)
                 }
                 .padding(.horizontal, 40)
