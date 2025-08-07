@@ -27,14 +27,21 @@ struct GameScene: View {
                 Text(viewModel.problem.question)
                     .font(.largeTitle)
 
-                if let feedback = viewModel.feedback {
-                    Image(systemName: feedback == .correct ? "checkmark.circle" : "xmark.circle")
-                        .foregroundColor(feedback == .correct ? .green : .red)
-                        .font(.system(size: 50))
+                Group {
+                    if let feedback = viewModel.feedback {
+                        Image(systemName: feedback == .correct ? "checkmark.circle" : "xmark.circle")
+                            .foregroundColor(feedback == .correct ? .green : .red)
+                    } else {
+                        Image(systemName: "checkmark.circle")
+                            .opacity(0)
+                    }
                 }
+                .font(.system(size: 50))
+                .frame(height: 60)
 
                 Text(viewModel.userInput)
                     .font(.title)
+                    .frame(height: 40)
 
                 keypad
             }
