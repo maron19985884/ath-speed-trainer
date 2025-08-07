@@ -172,8 +172,10 @@ final class GameSceneViewModel: ObservableObject {
                 return
             }
 
-            feedback = nil
             problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                self.feedback = nil
+            }
         } else {
             feedback = .wrong
             incorrectCount += 1
@@ -196,7 +198,9 @@ final class GameSceneViewModel: ObservableObject {
 
             // Do not change the problem; reset only user input and feedback
             userInput = ""
-            feedback = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                self.feedback = nil
+            }
         }
     }
 
