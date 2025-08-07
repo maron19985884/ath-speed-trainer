@@ -17,7 +17,7 @@ struct GameScene: View {
     private var modeLabel: String {
         switch mode {
         case .timeAttack: return "タイムアタック"
-        case .correctCount: return "正解数チャレンジ"
+        case .correctCount: return "10問正解タイムアタック"
         case .noMistake: return "ミス耐久"
         }
     }

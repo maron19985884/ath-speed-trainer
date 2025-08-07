@@ -27,13 +27,25 @@ struct ResultView: View {
         }
     }
 
+    private var modeLabel: String {
+        switch mode {
+        case .timeAttack: return "タイムアタック"
+        case .correctCount: return "10問正解タイムアタック"
+        case .noMistake: return "ミス耐久"
+        }
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             BackButton { currentScreen = .modeSelect }
 
             VStack(spacing: 40) {
-                Text("結果発表")
-                    .font(.largeTitle)
+                VStack(spacing: 20) {
+                    Text("結果発表")
+                        .font(.largeTitle)
+                    Text(modeLabel)
+                        .font(.title2)
+                }
 
                 VStack(spacing: 20) {
                     switch mode {
