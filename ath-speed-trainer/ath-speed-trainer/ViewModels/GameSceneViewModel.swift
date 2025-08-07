@@ -130,8 +130,7 @@ final class GameSceneViewModel: ObservableObject {
     }
 
     func submit() {
-        guard canInput() else { return }
-        guard let value = Int(userInput) else { return }
+        guard canInput(), let value = Int(userInput) else { return }
 
         if value == problem.answer {
             feedback = .correct
@@ -148,6 +147,17 @@ final class GameSceneViewModel: ObservableObject {
                 }
                 clearDeltasAfterDelay()
             }
+
+            answeredCount += 1
+            userInput = ""
+
+            if mode == .correctCount && answeredCount >= questionLimit {
+                endGame()
+                return
+            }
+
+            feedback = nil
+            problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
         } else {
             feedback = .wrong
             incorrectCount += 1
@@ -165,20 +175,10 @@ final class GameSceneViewModel: ObservableObject {
                 userInput = ""
                 return
             }
-        }
 
-        answeredCount += 1
-        userInput = ""
-
-        if mode == .correctCount && answeredCount >= questionLimit {
-            endGame()
-            return
-        }
-
-        if mode == .timeAttack || mode == .correctCount {
-            problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
-        } else if mode == .noMistake && feedback == .correct {
-            problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
+            // Do not change the problem; reset only user input and feedback
+            userInput = ""
+            feedback = nil
         }
     }
 
