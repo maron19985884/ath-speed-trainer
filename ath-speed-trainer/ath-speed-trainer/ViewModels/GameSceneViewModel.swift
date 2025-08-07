@@ -99,9 +99,11 @@ final class GameSceneViewModel: ObservableObject {
 
     func toggleSign() {
         guard canInput() else { return }
-        if userInput.hasPrefix("-") {
+        if userInput == "-" {
+            userInput = ""
+        } else if userInput.hasPrefix("-") {
             userInput.removeFirst()
-        } else if !userInput.isEmpty {
+        } else {
             userInput = "-" + userInput
         }
     }
