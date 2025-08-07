@@ -16,30 +16,13 @@ struct GameScene: View {
         ZStack {
             VStack(spacing: 20) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Score: \(viewModel.score)")
-                        if let delta = viewModel.scoreDelta {
-                            Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
-                                .foregroundColor(delta > 0 ? .green : .red)
-                                .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut, value: viewModel.scoreDelta)
-
+                    Text("Score: \(viewModel.score)")
                     Spacer()
-
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("Time: \(viewModel.timeRemaining)")
-                        if let delta = viewModel.timeDelta {
-                            Text("+\(delta)秒")
-                                .foregroundColor(.green)
-                                .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut, value: viewModel.timeDelta)
+                    Text("Time: \(viewModel.timeRemaining)")
                 }
                 .font(.title2)
-                .padding()
+                .padding(.top, 40)
+                .padding(.horizontal)
 
                 Text(viewModel.problem.question)
                     .font(.largeTitle)
