@@ -7,41 +7,47 @@ struct SettingView: View {
     @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
 
     var body: some View {
-        VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
-            HStack {
-                Button(action: { currentScreen = .modeSelect }) {
-                    Text("メニューに戻る")
-                        .font(DesignTokens.Typography.body)
-                        .padding(DesignTokens.Spacing.s)
-                        .background(DesignTokens.Colors.surface)
-                        .cornerRadius(DesignTokens.Radius.m)
-                        .foregroundColor(DesignTokens.Colors.onDark)
-                }
-                .contentShape(Rectangle())
-                Spacer()
-            }
-            .padding(.top, DesignTokens.Spacing.l)
-            .padding(.leading, DesignTokens.Spacing.l)
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.xl) {
+            BackButton { currentScreen = .modeSelect }
 
-
-            VStack(spacing: DesignTokens.Spacing.l + DesignTokens.Spacing.xl) {
+            VStack(alignment: .leading, spacing: DesignTokens.Spacing.l) {
                 Text("設定")
                     .font(DesignTokens.Typography.title)
+                    .underline(true, color: DesignTokens.Colors.neonBlue)
 
-                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
+                VStack(spacing: DesignTokens.Spacing.m) {
                     Toggle("BGM", isOn: $isBgmOn)
-                        .font(DesignTokens.Typography.title)
+                        .padding()
+                        .background(DesignTokens.Colors.surface)
+                        .cornerRadius(DesignTokens.Radius.m)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                                .stroke(DesignTokens.Colors.neonBlue, lineWidth: 1)
+                        )
                     Toggle("効果音（SE）", isOn: $isSeOn)
-                        .font(DesignTokens.Typography.title)
+                        .padding()
+                        .background(DesignTokens.Colors.surface)
+                        .cornerRadius(DesignTokens.Radius.m)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                                .stroke(DesignTokens.Colors.neonBlue, lineWidth: 1)
+                        )
                     Toggle("バイブレーション", isOn: $isVibrationOn)
-                        .font(DesignTokens.Typography.title)
+                        .padding()
+                        .background(DesignTokens.Colors.surface)
+                        .cornerRadius(DesignTokens.Radius.m)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                                .stroke(DesignTokens.Colors.neonBlue, lineWidth: 1)
+                        )
                 }
-                .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             }
 
             Spacer()
         }
         .foregroundColor(DesignTokens.Colors.onDark)
+        .padding(.vertical, DesignTokens.Spacing.xl)
+        .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
         .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 }
