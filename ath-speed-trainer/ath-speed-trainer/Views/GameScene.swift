@@ -41,16 +41,20 @@ struct GameScene: View {
                                     .hidden()
                             }
                         }
+                    } else if mode == .noMistake || mode == .correctCount {
+                        Text("正解数: \(viewModel.correctCount)")
                     }
                     Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("Time: \(viewModel.timeRemaining)")
-                        if let delta = viewModel.timeDelta {
-                            Text((delta > 0 ? "+\(delta)" : "\(delta)") + "秒")
-                                .foregroundColor(delta > 0 ? .green : .red)
-                        } else {
-                            Text(" ")
-                                .hidden()
+                    if mode != .noMistake {
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("Time: \(viewModel.timeRemaining)")
+                            if let delta = viewModel.timeDelta {
+                                Text((delta > 0 ? "+\(delta)" : "\(delta)") + "秒")
+                                    .foregroundColor(delta > 0 ? .green : .red)
+                            } else {
+                                Text(" ")
+                                    .hidden()
+                            }
                         }
                     }
                 }
@@ -131,16 +135,22 @@ struct GameScene: View {
                     .foregroundColor(.white)
             }
 
-            if viewModel.showCombo {
-                Text("連続\(viewModel.comboCount)問正解！")
-                    .font(.title2)
-                    .foregroundColor(.orange)
-                    .padding()
-                    .background(Color.white.opacity(0.8))
-                    .cornerRadius(10)
-                    .transition(.scale)
-                    .zIndex(1)
+            VStack {
+                if viewModel.showCombo {
+                    Text("連続\(viewModel.comboCount)問正解！")
+                        .font(.title2)
+                        .foregroundColor(.orange)
+                        .padding()
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(10)
+                        .transition(.scale)
+                }
+                Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.top, 80)
+            .zIndex(1)
+            .allowsHitTesting(false)
         }
         .animation(.easeInOut, value: viewModel.comboCount)
         .onAppear { viewModel.startGame() }
