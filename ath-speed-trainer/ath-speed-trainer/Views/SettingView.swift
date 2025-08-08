@@ -7,39 +7,42 @@ struct SettingView: View {
     @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
             HStack {
                 Button(action: { currentScreen = .modeSelect }) {
                     Text("メニューに戻る")
-                        .font(.title3)
-                        .padding(8)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
+                        .font(DesignTokens.Typography.body)
+                        .padding(DesignTokens.Spacing.s)
+                        .background(DesignTokens.Colors.surface)
+                        .cornerRadius(DesignTokens.Radius.m)
+                        .foregroundColor(DesignTokens.Colors.onDark)
                 }
                 .contentShape(Rectangle())
                 Spacer()
             }
-            .padding(.top, 16)
-            .padding(.leading, 16)
+            .padding(.top, DesignTokens.Spacing.l)
+            .padding(.leading, DesignTokens.Spacing.l)
 
 
-            VStack(spacing: 40) {
+            VStack(spacing: DesignTokens.Spacing.l + DesignTokens.Spacing.xl) {
                 Text("設定")
-                    .font(.largeTitle)
+                    .font(DesignTokens.Typography.title)
 
-                VStack(spacing: 20) {
+                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     Toggle("BGM", isOn: $isBgmOn)
-                        .font(.title2)
+                        .font(DesignTokens.Typography.title)
                     Toggle("効果音（SE）", isOn: $isSeOn)
-                        .font(.title2)
+                        .font(DesignTokens.Typography.title)
                     Toggle("バイブレーション", isOn: $isVibrationOn)
-                        .font(.title2)
+                        .font(DesignTokens.Typography.title)
                 }
-                .padding(.horizontal, 40)
+                .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             }
 
             Spacer()
         }
+        .foregroundColor(DesignTokens.Colors.onDark)
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 }
 

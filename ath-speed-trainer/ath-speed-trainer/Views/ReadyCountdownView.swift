@@ -11,8 +11,12 @@ struct ReadyCountdownView: View {
 
     var body: some View {
         Text(steps[index])
-            .font(.system(size: 80, weight: .bold))
+            .font(DesignTokens.Typography.digitalMono)
+            .scaleEffect(2.4)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .foregroundColor(DesignTokens.Colors.neonBlue)
+            .glow(DesignTokens.Colors.neonBlue)
+            .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
             .onAppear(perform: startCountdown)
     }
 

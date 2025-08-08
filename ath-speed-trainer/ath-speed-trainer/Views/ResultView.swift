@@ -36,58 +36,61 @@ struct ResultView: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
             BackButton { currentScreen = .modeSelect }
 
-            VStack(spacing: 40) {
-                VStack(spacing: 20) {
+            VStack(spacing: DesignTokens.Spacing.l + DesignTokens.Spacing.xl) {
+                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     Text("結果発表")
-                        .font(.largeTitle)
+                        .font(DesignTokens.Typography.title)
                     Text(modeLabel)
-                        .font(.title2)
+                        .font(DesignTokens.Typography.title)
                 }
 
-                VStack(spacing: 20) {
+                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     switch mode {
                     case .timeAttack:
                         Text("スコア: \(score)点")
-                            .font(.title2)
+                            .font(DesignTokens.Typography.title)
                         Text("\(correctCount)問正解")
-                            .font(.title2)
+                            .font(DesignTokens.Typography.title)
                         if let incorrectCount {
                             Text("\(incorrectCount)問不正解")
-                                .font(.title2)
+                                .font(DesignTokens.Typography.title)
                         }
                         if let highScore {
                             Text("ハイスコア: \(highScore)点")
-                                .font(.title3)
-                                .padding(.top, 10)
+                                .font(DesignTokens.Typography.body)
+                                .padding(.top, DesignTokens.Spacing.s)
                         }
                     case .correctCount:
                         Text("時間: \(time)秒")
-                            .font(.title2)
+                            .font(DesignTokens.Typography.title)
                     case .noMistake:
                         Text("\(correctCount)問正解")
-                            .font(.title2)
+                            .font(DesignTokens.Typography.title)
                     }
                 }
-
-                VStack(spacing: 20) {
+                
+                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     Button(action: { currentScreen = .ready }) {
                         Text("もう一度プレイ")
-                            .font(.title2)
+                            .font(DesignTokens.Typography.title)
                             .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue.opacity(0.2))
-                            .cornerRadius(8)
+                            .padding(DesignTokens.Spacing.m)
+                            .background(DesignTokens.Colors.neonBlue.opacity(0.2))
+                            .cornerRadius(DesignTokens.Radius.m)
+                            .foregroundColor(DesignTokens.Colors.onDark)
                     }
                     .contentShape(Rectangle())
                 }
-                .padding(.horizontal, 40)
+                .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             }
 
             Spacer()
         }
+        .foregroundColor(DesignTokens.Colors.onDark)
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 }
 

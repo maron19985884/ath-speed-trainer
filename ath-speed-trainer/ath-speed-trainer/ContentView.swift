@@ -21,7 +21,8 @@ struct ContentView: View {
     @State private var elapsedTime: Int = 0
 
     var body: some View {
-        switch currentScreen {
+        Group {
+            switch currentScreen {
         case .modeSelect:
             ModeSelectView(currentScreen: $currentScreen, selectedMode: $selectedMode)
                 .onChange(of: selectedMode) { _, newValue in
@@ -75,6 +76,9 @@ struct ContentView: View {
         case .credit:
             CreditView(currentScreen: $currentScreen)
         }
+        }
+        .foregroundColor(DesignTokens.Colors.onDark)
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 }
 

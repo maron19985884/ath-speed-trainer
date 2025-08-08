@@ -24,10 +24,10 @@ struct GameScene: View {
 
     var body: some View {
         ZStack {
-            VStack(spacing: 20) {
+            VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 Text(modeLabel)
-                    .font(.headline)
-                    .padding(.top, 16)
+                    .font(DesignTokens.Typography.body)
+                    .padding(.top, DesignTokens.Spacing.l)
 
                 HStack {
                     if mode == .timeAttack {
@@ -35,7 +35,7 @@ struct GameScene: View {
                             Text("Score: \(viewModel.score)")
                             if let delta = viewModel.scoreDelta {
                                 Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
-                                    .foregroundColor(delta > 0 ? .green : .red)
+                                    .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
                             } else {
                                 Text(" ")
                                     .hidden()
@@ -50,7 +50,7 @@ struct GameScene: View {
                             Text("Time: \(viewModel.timeRemaining)")
                             if let delta = viewModel.timeDelta {
                                 Text((delta > 0 ? "+\(delta)" : "\(delta)") + "秒")
-                                    .foregroundColor(delta > 0 ? .green : .red)
+                                    .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
                             } else {
                                 Text(" ")
                                     .hidden()
@@ -58,27 +58,28 @@ struct GameScene: View {
                         }
                     }
                 }
-                .font(.title2)
-                .padding(.top, 8)
-                .padding(.horizontal)
+                .font(DesignTokens.Typography.digitalMono)
+                .padding(.top, DesignTokens.Spacing.s)
+                .padding(.horizontal, DesignTokens.Spacing.l)
 
                 Text(viewModel.problem.question)
-                    .font(.largeTitle)
+                    .font(DesignTokens.Typography.title)
+                    .glow(DesignTokens.Colors.neonBlue)
 
                 Group {
                     if let feedback = viewModel.feedback {
                         Image(systemName: feedback == .correct ? "checkmark.circle" : "xmark.circle")
-                            .foregroundColor(feedback == .correct ? .green : .red)
+                            .foregroundColor(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
                     } else {
                         Image(systemName: "checkmark.circle")
                             .opacity(0)
                     }
                 }
-                .font(.system(size: 50))
+                .font(DesignTokens.Typography.digitalMono)
                 .frame(height: 60)
 
                 Text(viewModel.userInput)
-                    .font(.title)
+                    .font(DesignTokens.Typography.digitalMono)
                     .frame(height: 40)
 
                 keypad
@@ -93,10 +94,10 @@ struct GameScene: View {
                             showPauseMenu = true
                         }) {
                             Image(systemName: "pause.circle")
-                                .font(.title)
+                                .font(DesignTokens.Typography.title)
                         }
-                        .padding(.top, 16)
-                        .padding(.leading, 16)
+                        .padding(.top, DesignTokens.Spacing.l)
+                        .padding(.leading, DesignTokens.Spacing.l)
                         Spacer()
                     }
                     Spacer()
@@ -106,39 +107,58 @@ struct GameScene: View {
             if showPauseMenu {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
-                VStack(spacing: 20) {
+                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     Button("再開") {
                         startCountdown {
                             viewModel.resumeGame()
                         }
                     }
+                    .font(DesignTokens.Typography.title)
+                    .padding(DesignTokens.Spacing.m)
+                    .background(DesignTokens.Colors.surface)
+                    .cornerRadius(DesignTokens.Radius.m)
+                    .foregroundColor(DesignTokens.Colors.onDark)
+
                     Button("リセット") {
                         startCountdown {
                             viewModel.startGame()
                         }
                     }
+                    .font(DesignTokens.Typography.title)
+                    .padding(DesignTokens.Spacing.m)
+                    .background(DesignTokens.Colors.surface)
+                    .cornerRadius(DesignTokens.Radius.m)
+                    .foregroundColor(DesignTokens.Colors.onDark)
+
                     Button("メニューに戻る") {
                         viewModel.stopGame()
                         currentScreen = .modeSelect
                     }
+                    .font(DesignTokens.Typography.title)
+                    .padding(DesignTokens.Spacing.m)
+                    .background(DesignTokens.Colors.surface)
+                    .cornerRadius(DesignTokens.Radius.m)
+                    .foregroundColor(DesignTokens.Colors.onDark)
                 }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(12)
+                .padding(DesignTokens.Spacing.m)
+                .background(DesignTokens.Colors.surface)
+                .cornerRadius(DesignTokens.Radius.m)
             }
 
             if countdown > 0 {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                 Text("\(countdown)")
-                    .font(.system(size: 60))
-                    .foregroundColor(.white)
+                    .font(DesignTokens.Typography.digitalMono)
+                    .scaleEffect(2)
+                    .foregroundColor(DesignTokens.Colors.neonBlue)
+                    .glow(DesignTokens.Colors.neonBlue)
             }
 
             VStack {
                 if viewModel.showCombo {
                     Text("連続\(viewModel.comboCount)問正解！")
-                        .font(.title2)
+                        .font(DesignTokens.Typography.title)
                         .fontWeight(.bold)
                         .foregroundStyle(
                             LinearGradient(
@@ -147,66 +167,72 @@ struct GameScene: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.9))
-                        .cornerRadius(10)
+                        .padding(.horizontal, DesignTokens.Spacing.l)
+                        .padding(.vertical, DesignTokens.Spacing.s)
+                        .background(DesignTokens.Colors.surface.opacity(0.9))
+                        .cornerRadius(DesignTokens.Radius.m)
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.top, 72)          // 入力欄と被らないよう上から少し下げる
+            .padding(.top, DesignTokens.Spacing.xl * 3)          // 入力欄と被らないよう上から少し下げる
             .allowsHitTesting(false)     // タップ妨害を防止
             .zIndex(2)
             .animation(.easeInOut, value: viewModel.showCombo)
 
         }
+        .foregroundColor(DesignTokens.Colors.onDark)
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
         .animation(.easeInOut, value: viewModel.comboCount)
         .onAppear { viewModel.startGame() }
     }
 
     private var keypad: some View {
-        VStack(spacing: 10) {
-            VStack(spacing: 10) {
+        VStack(spacing: DesignTokens.Spacing.s) {
+            VStack(spacing: DesignTokens.Spacing.s) {
                 ForEach(0..<3, id: \.self) { row in
-                    HStack(spacing: 10) {
+                    HStack(spacing: DesignTokens.Spacing.s) {
                         ForEach(1...3, id: \.self) { col in
                             let number = row * 3 + col
                             Button(action: { viewModel.enterDigit(number) }) {
                                 Text("\(number)")
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .padding()
-                                    .background(Color.gray.opacity(0.2))
-                                    .cornerRadius(8)
+                                    .padding(DesignTokens.Spacing.m)
+                                    .background(DesignTokens.Colors.surface)
+                                    .cornerRadius(DesignTokens.Radius.m)
+                                    .keycapShadow()
                             }
                             .contentShape(Rectangle())
                         }
                     }
                 }
-                HStack(spacing: 10) {
+                HStack(spacing: DesignTokens.Spacing.s) {
                     Button(action: { viewModel.toggleSign() }) {
                         Text("+/-")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
+                            .padding(DesignTokens.Spacing.m)
+                            .background(DesignTokens.Colors.surface)
+                            .cornerRadius(DesignTokens.Radius.m)
+                            .keycapShadow()
                     }
                     .contentShape(Rectangle())
                     Button(action: { viewModel.enterDigit(0) }) {
                         Text("0")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
+                            .padding(DesignTokens.Spacing.m)
+                            .background(DesignTokens.Colors.surface)
+                            .cornerRadius(DesignTokens.Radius.m)
+                            .keycapShadow()
                     }
                     .contentShape(Rectangle())
                     Button(action: { viewModel.deleteLastDigit() }) {
                         Image(systemName: "delete.left")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
+                            .padding(DesignTokens.Spacing.m)
+                            .background(DesignTokens.Colors.surface)
+                            .cornerRadius(DesignTokens.Radius.m)
+                            .keycapShadow()
                     }
                     .contentShape(Rectangle())
                 }
@@ -215,11 +241,12 @@ struct GameScene: View {
 
             Button(action: { viewModel.submit() }) {
                 Text("Enter")
-                    .font(.title) // ← 大きめの文字
+                    .font(DesignTokens.Typography.title)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20) // ← 縦方向の余白を増やす
-                    .background(Color.blue.opacity(0.2))
-                    .cornerRadius(8)
+                    .padding(.vertical, DesignTokens.Spacing.l)
+                    .background(DesignTokens.Colors.neonBlue.opacity(0.2))
+                    .cornerRadius(DesignTokens.Radius.m)
+                    .keycapShadow()
             }
             .contentShape(Rectangle())
             .disabled(viewModel.userInput.isEmpty)
