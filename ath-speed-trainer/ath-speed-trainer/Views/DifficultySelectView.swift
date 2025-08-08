@@ -25,9 +25,9 @@ struct DifficultySelectView: View {
                 VStack(spacing: 10) {
                     Text("出題形式")
                     HStack(spacing: 20) {
-                        styleButton(title: "単一演算", style: .single)
-                        styleButton(title: "連続演算", style: .sequence)
-                        styleButton(title: "ランダム", style: .mixed)
+                        styleButton(title: "1つずつ出題", style: .single)
+                        styleButton(title: "続けて計算", style: .sequence)
+                        styleButton(title: "ランダム出題", style: .mixed)
                     }
                 }
             }
@@ -38,9 +38,10 @@ struct DifficultySelectView: View {
                     .font(.title2)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue.opacity(0.2))
+                    .background((selectedDifficulty != nil && selectedStyle != nil) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
                     .cornerRadius(8)
             }
+            .disabled(selectedDifficulty == nil || selectedStyle == nil)
             .contentShape(Rectangle())
             .padding(.horizontal, 40)
 
