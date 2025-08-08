@@ -11,7 +11,7 @@ struct DifficultySelectView: View {
 
     var body: some View {
         ZStack {
-            DesignTokens.Colors.backgroundDark.ignoresSafeArea()
+            AppBackground()
 
             VStack(spacing: 0) {
                 // 左上：メニューへ戻る
