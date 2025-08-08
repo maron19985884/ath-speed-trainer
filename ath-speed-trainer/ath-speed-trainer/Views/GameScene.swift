@@ -215,14 +215,16 @@ struct GameScene: View {
 
             Button(action: { viewModel.submit() }) {
                 Text("Enter")
+                    .font(.title) // ← 大きめの文字
                     .frame(maxWidth: .infinity)
-                    .padding()
+                    .padding(.vertical, 20) // ← 縦方向の余白を増やす
                     .background(Color.blue.opacity(0.2))
                     .cornerRadius(8)
             }
             .contentShape(Rectangle())
             .disabled(viewModel.userInput.isEmpty)
             .opacity(viewModel.userInput.isEmpty ? 0.4 : 1.0)
+
         }
     }
 

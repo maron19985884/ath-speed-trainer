@@ -8,7 +8,20 @@ struct SettingView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            BackButton { currentScreen = .modeSelect }
+            HStack {
+                Button(action: { currentScreen = .modeSelect }) {
+                    Text("メニューに戻る")
+                        .font(.title3)
+                        .padding(8)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                }
+                .contentShape(Rectangle())
+                Spacer()
+            }
+            .padding(.top, 16)
+            .padding(.leading, 16)
+
 
             VStack(spacing: 40) {
                 Text("設定")

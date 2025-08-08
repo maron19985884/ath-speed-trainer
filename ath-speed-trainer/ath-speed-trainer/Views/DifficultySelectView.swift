@@ -7,6 +7,19 @@ struct DifficultySelectView: View {
     var startGame: () -> Void
 
     var body: some View {
+        HStack {
+            Button(action: { currentScreen = .modeSelect }) {
+                Text("メニューに戻る")
+                    .font(.title3)
+                    .padding(8)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+            }
+            .contentShape(Rectangle())
+            Spacer()
+        }
+        .padding(.top, 16)
+        .padding(.leading, 16)
         VStack(spacing: 40) {
             Text("難易度・出題形式の選択")
                 .font(.largeTitle)
@@ -47,17 +60,6 @@ struct DifficultySelectView: View {
 
             Spacer()
 
-            Button(action: { currentScreen = .modeSelect }) {
-                Text("メニューに戻る")
-                    .font(.title3)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-            }
-            .contentShape(Rectangle())
-            .padding(.horizontal, 40)
-            .padding(.bottom, 40)
         }
     }
 
