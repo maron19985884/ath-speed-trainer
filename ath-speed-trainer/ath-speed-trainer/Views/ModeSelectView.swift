@@ -5,14 +5,15 @@ struct ModeSelectView: View {
     @Binding var selectedMode: GameMode?
 
     var body: some View {
-        VStack {
+        VStack(spacing: DesignTokens.Spacing.xl) {
             Text("Ath Speed Trainer")
                 .font(DesignTokens.Typography.title)
-                .padding(.top, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
+                .foregroundColor(DesignTokens.Colors.onDark)
+                .padding(.top, DesignTokens.Spacing.xl)
 
             Text("モード選択")
-                .font(DesignTokens.Typography.body)
-                .padding(.top, DesignTokens.Spacing.s)
+                .font(DesignTokens.Typography.title)
+                .foregroundColor(DesignTokens.Colors.onDark)
 
             VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
@@ -20,7 +21,6 @@ struct ModeSelectView: View {
                 modeButton(title: "ミス耐久", mode: .noMistake)
             }
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
-            .padding(.top, DesignTokens.Spacing.l)
 
             Spacer()
 
@@ -31,7 +31,6 @@ struct ModeSelectView: View {
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             .padding(.bottom, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
         }
-        .foregroundColor(DesignTokens.Colors.onDark)
         .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 
@@ -44,26 +43,41 @@ struct ModeSelectView: View {
         }) {
             Text(title)
                 .font(DesignTokens.Typography.title)
-                .frame(maxWidth: .infinity)
-                .padding(DesignTokens.Spacing.m)
-                .background(DesignTokens.Colors.neonBlue.opacity(0.2))
-                .cornerRadius(DesignTokens.Radius.m)
-                .foregroundColor(DesignTokens.Colors.onDark)
+                .bold()
         }
-        .contentShape(Rectangle())
+        .buttonStyle(HologramButtonStyle())
     }
 
     private func menuButton(title: String, screen: AppScreen) -> some View {
         Button(action: { currentScreen = screen }) {
             Text(title)
                 .font(DesignTokens.Typography.body)
-                .frame(maxWidth: .infinity)
-                .padding(DesignTokens.Spacing.m)
-                .background(DesignTokens.Colors.surface)
-                .cornerRadius(DesignTokens.Radius.m)
-                .foregroundColor(DesignTokens.Colors.onDark)
+                .bold()
         }
-        .contentShape(Rectangle())
+        .buttonStyle(HologramButtonStyle())
+    }
+}
+
+struct HologramButtonStyle: ButtonStyle {
+    var isSelected: Bool = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        let color = isSelected ? DesignTokens.Colors.neonPurple : DesignTokens.Colors.neonBlue
+        let radius: CGFloat = (isSelected || configuration.isPressed) ? 12 : 6
+
+        return configuration.label
+            .frame(maxWidth: .infinity, minWidth: 120, minHeight: 56)
+            .padding(DesignTokens.Spacing.m)
+            .background(DesignTokens.Colors.surface)
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.l)
+                    .stroke(color.opacity(0.7), lineWidth: 1.5)
+            )
+            .foregroundColor(DesignTokens.Colors.onDark)
+            .cornerRadius(DesignTokens.Radius.l)
+            .glow(color, radius: radius)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

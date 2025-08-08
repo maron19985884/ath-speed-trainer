@@ -12,12 +12,15 @@ struct DifficultySelectView: View {
                 Button(action: { currentScreen = .modeSelect }) {
                     Text("メニューに戻る")
                         .font(DesignTokens.Typography.body)
+                        .foregroundColor(DesignTokens.Colors.onDark)
                         .padding(DesignTokens.Spacing.s)
                         .background(DesignTokens.Colors.surface)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                                .stroke(DesignTokens.Colors.neonBlue.opacity(0.5), lineWidth: 1)
+                        )
                         .cornerRadius(DesignTokens.Radius.m)
-                        .foregroundColor(DesignTokens.Colors.onDark)
                 }
-                .contentShape(Rectangle())
                 Spacer()
             }
             .padding(.top, DesignTokens.Spacing.l)
@@ -26,12 +29,14 @@ struct DifficultySelectView: View {
             VStack(spacing: DesignTokens.Spacing.xl + DesignTokens.Spacing.l) {
                 Text("難易度・出題形式の選択")
                     .font(DesignTokens.Typography.title)
-                    .padding(.top, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
+                    .foregroundColor(DesignTokens.Colors.onDark)
+                    .padding(.top, DesignTokens.Spacing.xl)
 
                 VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     VStack(spacing: DesignTokens.Spacing.s) {
                         Text("難易度")
                             .font(DesignTokens.Typography.body)
+                            .foregroundColor(DesignTokens.Colors.onDark)
                         HStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                             difficultyButton(title: "Easy", difficulty: .easy)
                             difficultyButton(title: "Normal", difficulty: .normal)
@@ -42,6 +47,7 @@ struct DifficultySelectView: View {
                     VStack(spacing: DesignTokens.Spacing.s) {
                         Text("出題形式")
                             .font(DesignTokens.Typography.body)
+                            .foregroundColor(DesignTokens.Colors.onDark)
                         HStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                             styleButton(title: "1つずつ出題", style: .single)
                             styleButton(title: "続けて計算", style: .sequence)
@@ -54,47 +60,89 @@ struct DifficultySelectView: View {
                 Button(action: startGame) {
                     Text("ゲーム開始")
                         .font(DesignTokens.Typography.title)
-                        .frame(maxWidth: .infinity)
-                        .padding(DesignTokens.Spacing.m)
-                        .background((selectedDifficulty != nil && selectedStyle != nil) ? DesignTokens.Colors.neonBlue.opacity(0.2) : DesignTokens.Colors.surface)
-                        .cornerRadius(DesignTokens.Radius.m)
-                        .foregroundColor(DesignTokens.Colors.onDark)
+                        .bold()
                 }
+                .buttonStyle(StartButtonStyle(enabled: selectedDifficulty != nil && selectedStyle != nil))
                 .disabled(selectedDifficulty == nil || selectedStyle == nil)
-                .contentShape(Rectangle())
                 .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
 
                 Spacer()
             }
         }
-        .foregroundColor(DesignTokens.Colors.onDark)
         .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 
     private func difficultyButton(title: String, difficulty: Difficulty) -> some View {
-        Button(action: { selectedDifficulty = difficulty }) {
+        let selected = selectedDifficulty == difficulty
+        return Button(action: { selectedDifficulty = difficulty }) {
             Text(title)
                 .font(DesignTokens.Typography.title)
-                .frame(maxWidth: .infinity)
-                .padding(DesignTokens.Spacing.m)
-                .background(selectedDifficulty == difficulty ? DesignTokens.Colors.neonBlue.opacity(0.6) : DesignTokens.Colors.neonBlue.opacity(0.2))
-                .cornerRadius(DesignTokens.Radius.m)
-                .foregroundColor(DesignTokens.Colors.onDark)
+                .bold()
         }
-        .contentShape(Rectangle())
+        .buttonStyle(HologramButtonStyle(isSelected: selected))
+        .accessibilityLabel(Text(selected ? "\(title) 選択中" : title))
     }
 
     private func styleButton(title: String, style: QuestionStyle) -> some View {
-        Button(action: { selectedStyle = style }) {
+        let selected = selectedStyle == style
+        return Button(action: { selectedStyle = style }) {
             Text(title)
                 .font(DesignTokens.Typography.title)
-                .frame(maxWidth: .infinity)
-                .padding(DesignTokens.Spacing.m)
-                .background(selectedStyle == style ? DesignTokens.Colors.neonGreen.opacity(0.6) : DesignTokens.Colors.neonGreen.opacity(0.2))
-                .cornerRadius(DesignTokens.Radius.m)
-                .foregroundColor(DesignTokens.Colors.onDark)
+                .bold()
         }
-        .contentShape(Rectangle())
+        .buttonStyle(HologramButtonStyle(isSelected: selected))
+        .accessibilityLabel(Text(selected ? "\(title) 選択中" : title))
+    }
+}
+
+struct HologramButtonStyle: ButtonStyle {
+    var isSelected: Bool = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        let color = isSelected ? DesignTokens.Colors.neonPurple : DesignTokens.Colors.neonBlue
+        let radius: CGFloat = (isSelected || configuration.isPressed) ? 12 : 6
+
+        return configuration.label
+            .frame(maxWidth: .infinity, minWidth: 120, minHeight: 56)
+            .padding(DesignTokens.Spacing.m)
+            .background(DesignTokens.Colors.surface)
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.l)
+                    .stroke(color.opacity(0.7), lineWidth: 1.5)
+            )
+            .foregroundColor(DesignTokens.Colors.onDark)
+            .cornerRadius(DesignTokens.Radius.l)
+            .glow(color, radius: radius)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
+struct StartButtonStyle: ButtonStyle {
+    var enabled: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        return configuration.label
+            .frame(maxWidth: .infinity, minWidth: 120, minHeight: 56)
+            .padding(DesignTokens.Spacing.m)
+            .background(
+                Group {
+                    if enabled {
+                        LinearGradient(colors: [DesignTokens.Colors.neonBlue, DesignTokens.Colors.neonBlueDeep], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    } else {
+                        DesignTokens.Colors.surface.opacity(0.5)
+                    }
+                }
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.l)
+                    .stroke(DesignTokens.Colors.neonBlue.opacity(0.7), lineWidth: 1.5)
+            )
+            .foregroundColor(.white)
+            .cornerRadius(DesignTokens.Radius.l)
+            .glow(DesignTokens.Colors.neonBlue, radius: enabled ? (configuration.isPressed ? 12 : 8) : 0)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
