@@ -7,7 +7,7 @@ struct ReadyCountdownView: View {
     /// 表示するテキストのインデックス
     @State private var index: Int = 0
     /// カウントダウンで表示する文字列
-    private let steps = ["3", "2", "1"]
+    private let steps = ["3", "2", "1","GO!"]
 
     var body: some View {
         Text(steps[index])
@@ -23,7 +23,7 @@ struct ReadyCountdownView: View {
                 index += 1
             } else {
                 timer.invalidate()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     currentScreen = .game
                 }
             }

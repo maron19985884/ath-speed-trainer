@@ -139,18 +139,28 @@ struct GameScene: View {
                 if viewModel.showCombo {
                     Text("連続\(viewModel.comboCount)問正解！")
                         .font(.title2)
-                        .foregroundColor(.orange)
-                        .padding()
-                        .background(Color.white.opacity(0.8))
+                        .fontWeight(.bold)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.orange, .red],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.9))
                         .cornerRadius(10)
-                        .transition(.scale)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                 }
                 Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.top, 80)
-            .zIndex(1)
-            .allowsHitTesting(false)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding(.top, 72)          // 入力欄と被らないよう上から少し下げる
+            .allowsHitTesting(false)     // タップ妨害を防止
+            .zIndex(2)
+            .animation(.easeInOut, value: viewModel.showCombo)
+
         }
         .animation(.easeInOut, value: viewModel.comboCount)
         .onAppear { viewModel.startGame() }
