@@ -8,6 +8,9 @@ struct ResultView: View {
     let time: Int
     @Binding var currentScreen: AppScreen
     @State private var highScore: Int?
+    @State private var isNewHighScore = false
+    @State private var animateHighScore = false
+    @State private var scorePulse = false
 
     init(mode: GameMode, score: Int, correctCount: Int, incorrectCount: Int? = nil, time: Int = 0, currentScreen: Binding<AppScreen>) {
         self.mode = mode
@@ -23,6 +26,7 @@ struct ResultView: View {
             } else {
                 UserDefaults.standard.set(score, forKey: "HighScore")
                 _highScore = State(initialValue: score)
+                _isNewHighScore = State(initialValue: true)
             }
         }
     }
@@ -40,27 +44,56 @@ struct ResultView: View {
             BackButton { currentScreen = .modeSelect }
 
             VStack(spacing: DesignTokens.Spacing.l + DesignTokens.Spacing.xl) {
-                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
+                VStack(spacing: DesignTokens.Spacing.s) {
                     Text("結果発表")
                         .font(DesignTokens.Typography.title)
+                        .foregroundColor(DesignTokens.Colors.neonBlue)
+                        .glow(DesignTokens.Colors.neonBlue)
                     Text(modeLabel)
-                        .font(DesignTokens.Typography.title)
+                        .font(DesignTokens.Typography.body)
+                        .foregroundColor(DesignTokens.Colors.onMuted)
+                        .glow(DesignTokens.Colors.neonBlue, radius: 4)
                 }
 
-                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
+                VStack(spacing: DesignTokens.Spacing.m) {
                     switch mode {
                     case .timeAttack:
-                        Text("スコア: \(score)点")
-                            .font(DesignTokens.Typography.title)
-                        Text("\(correctCount)問正解")
-                            .font(DesignTokens.Typography.title)
-                        if let incorrectCount {
-                            Text("\(incorrectCount)問不正解")
-                                .font(DesignTokens.Typography.title)
+                        Text("SCORE \(String(format: "%03d", score))")
+                            .font(.system(size: 48, weight: .bold, design: .monospaced))
+                            .foregroundColor(DesignTokens.Colors.onDark)
+                            .glow(DesignTokens.Colors.neonBlue, radius: scorePulse ? 24 : 8)
+                            .scaleEffect(scorePulse ? 1.05 : 1.0)
+                            .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: scorePulse)
+                            .onAppear { scorePulse = true }
+                        VStack(spacing: DesignTokens.Spacing.s) {
+                            Text("\(correctCount)問正解")
+                            if let incorrectCount {
+                                Text("\(incorrectCount)問不正解")
+                            }
                         }
+                        .font(DesignTokens.Typography.body)
+                        .frame(maxWidth: .infinity)
+                        .padding(DesignTokens.Spacing.m)
+                        .background(DesignTokens.Colors.surface)
+                        .cornerRadius(DesignTokens.Radius.l)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignTokens.Radius.l)
+                                .stroke(DesignTokens.Colors.onMuted.opacity(0.3), lineWidth: 1)
+                        )
                         if let highScore {
-                            Text("ハイスコア: \(highScore)点")
+                            Text("HIGH SCORE: \(String(format: "%03d", highScore))")
                                 .font(DesignTokens.Typography.body)
+                                .foregroundColor(animateHighScore ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.onDark)
+                                .scaleEffect(animateHighScore ? 1.1 : 1.0)
+                                .animation(.spring(), value: animateHighScore)
+                                .onAppear {
+                                    if isNewHighScore {
+                                        animateHighScore = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                            animateHighScore = false
+                                        }
+                                    }
+                                }
                                 .padding(.top, DesignTokens.Spacing.s)
                         }
                     case .correctCount:
@@ -71,18 +104,13 @@ struct ResultView: View {
                             .font(DesignTokens.Typography.title)
                     }
                 }
-                
+
                 VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     Button(action: { currentScreen = .ready }) {
                         Text("もう一度プレイ")
                             .font(DesignTokens.Typography.title)
-                            .frame(maxWidth: .infinity)
-                            .padding(DesignTokens.Spacing.m)
-                            .background(DesignTokens.Colors.neonBlue.opacity(0.2))
-                            .cornerRadius(DesignTokens.Radius.m)
-                            .foregroundColor(DesignTokens.Colors.onDark)
                     }
-                    .contentShape(Rectangle())
+                    .buttonStyle(StartButtonStyle(enabled: true))
                 }
                 .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             }
