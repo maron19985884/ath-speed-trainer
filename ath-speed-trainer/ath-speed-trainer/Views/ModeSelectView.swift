@@ -7,31 +7,32 @@ struct ModeSelectView: View {
     var body: some View {
         VStack {
             Text("Ath Speed Trainer")
-                .font(.largeTitle)
-                .bold()
-                .padding(.top, 40)
+                .font(DesignTokens.Typography.title)
+                .padding(.top, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
 
             Text("モード選択")
-                .font(.title2)
-                .padding(.top, 10)
+                .font(DesignTokens.Typography.body)
+                .padding(.top, DesignTokens.Spacing.s)
 
-            VStack(spacing: 20) {
+            VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
                 modeButton(title: "10問正解タイムアタック", mode: .correctCount)
                 modeButton(title: "ミス耐久", mode: .noMistake)
             }
-            .padding(.horizontal, 40)
-            .padding(.top, 20)
+            .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
+            .padding(.top, DesignTokens.Spacing.l)
 
             Spacer()
 
-            VStack(spacing: 20) {
+            VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 menuButton(title: "設定", screen: .setting)
                 menuButton(title: "クレジット", screen: .credit)
             }
-            .padding(.horizontal, 40)
-            .padding(.bottom, 40)
+            .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
+            .padding(.bottom, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
         }
+        .foregroundColor(DesignTokens.Colors.onDark)
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 
     private func modeButton(title: String, mode: GameMode) -> some View {
@@ -42,11 +43,12 @@ struct ModeSelectView: View {
             }
         }) {
             Text(title)
-                .font(.title2)
+                .font(DesignTokens.Typography.title)
                 .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.blue.opacity(0.2))
-                .cornerRadius(8)
+                .padding(DesignTokens.Spacing.m)
+                .background(DesignTokens.Colors.neonBlue.opacity(0.2))
+                .cornerRadius(DesignTokens.Radius.m)
+                .foregroundColor(DesignTokens.Colors.onDark)
         }
         .contentShape(Rectangle())
     }
@@ -54,11 +56,12 @@ struct ModeSelectView: View {
     private func menuButton(title: String, screen: AppScreen) -> some View {
         Button(action: { currentScreen = screen }) {
             Text(title)
-                .font(.title3)
+                .font(DesignTokens.Typography.body)
                 .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
+                .padding(DesignTokens.Spacing.m)
+                .background(DesignTokens.Colors.surface)
+                .cornerRadius(DesignTokens.Radius.m)
+                .foregroundColor(DesignTokens.Colors.onDark)
         }
         .contentShape(Rectangle())
     }

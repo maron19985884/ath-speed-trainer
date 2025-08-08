@@ -7,16 +7,17 @@ struct BackButton: View {
         HStack {
             Button(action: action) {
                 Text("＜戻る") // ← 直接文字列で記述
-                    .font(.title3)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
+                    .font(DesignTokens.Typography.body)
+                    .padding(DesignTokens.Spacing.s)
+                    .background(DesignTokens.Colors.surface)
+                    .cornerRadius(DesignTokens.Radius.m)
+                    .foregroundColor(DesignTokens.Colors.onDark)
             }
             .contentShape(Rectangle())
             Spacer()
         }
-        .padding(.top, 16)
-        .padding(.leading, 16)
+        .padding(.top, DesignTokens.Spacing.l)
+        .padding(.leading, DesignTokens.Spacing.l)
     }
 }
 
