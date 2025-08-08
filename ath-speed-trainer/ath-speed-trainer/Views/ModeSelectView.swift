@@ -6,14 +6,14 @@ struct ModeSelectView: View {
 
     var body: some View {
         VStack(spacing: DesignTokens.Spacing.xl) {
-            Text("Ath Speed Trainer")
-                .font(DesignTokens.Typography.title)
-                .foregroundColor(DesignTokens.Colors.onDark)
+            // タイトル画像を挿入
+            Image("titlelogo") // Assets.xcassets に追加した画像名
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 1600) // 横幅の上限
                 .padding(.top, DesignTokens.Spacing.xl)
+                .padding(.bottom, DesignTokens.Spacing.l)
 
-            Text("モード選択")
-                .font(DesignTokens.Typography.title)
-                .foregroundColor(DesignTokens.Colors.onDark)
 
             VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
@@ -58,6 +58,36 @@ struct ModeSelectView: View {
     }
 }
 
+/// タイトル専用ビュー（サイズ・ネオン・下線で強調）
+fileprivate struct NeonTitle: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            Text("Ath Speed Trainer")
+                .font(.system(size: 40, weight: .heavy, design: .rounded))
+                .foregroundColor(DesignTokens.Colors.neonBlue)
+                // 発光感を強める二重シャドウ＋カスタムglow
+                .shadow(color: DesignTokens.Colors.neonBlue.opacity(0.6), radius: 12, x: 0, y: 0)
+                .shadow(color: DesignTokens.Colors.neonBlue.opacity(0.3), radius: 24, x: 0, y: 0)
+                .glow(DesignTokens.Colors.neonBlue, radius: 10)
+                .padding(.top, DesignTokens.Spacing.xl)
+
+            // グラデ下線バーで主見出しを固定
+            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                .fill(
+                    LinearGradient(
+                        colors: [DesignTokens.Colors.neonBlue, DesignTokens.Colors.neonBlueDeep],
+                        startPoint: .leading, endPoint: .trailing
+                    )
+                )
+                .frame(height: 6)
+                .glow(DesignTokens.Colors.neonBlue, radius: 6)
+                .padding(.horizontal, DesignTokens.Spacing.l)
+        }
+        .padding(.bottom, DesignTokens.Spacing.l)
+    }
+}
+
+// 既存ボタンスタイル
 struct HologramButtonStyle: ButtonStyle {
     var isSelected: Bool = false
 
@@ -66,7 +96,7 @@ struct HologramButtonStyle: ButtonStyle {
         let radius: CGFloat = (isSelected || configuration.isPressed) ? 12 : 6
 
         return configuration.label
-            .frame(maxWidth: .infinity, minWidth: 120, minHeight: 56)
+            .frame(minWidth: 120, maxWidth: .infinity, minHeight: 56)
             .padding(DesignTokens.Spacing.m)
             .background(DesignTokens.Colors.surface)
             .overlay(
@@ -84,4 +114,3 @@ struct HologramButtonStyle: ButtonStyle {
 #Preview {
     ModeSelectView(currentScreen: .constant(.modeSelect), selectedMode: .constant(nil))
 }
-

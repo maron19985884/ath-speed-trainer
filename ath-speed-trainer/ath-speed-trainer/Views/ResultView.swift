@@ -1,5 +1,26 @@
 import SwiftUI
 
+// Custom button style used by ResultView
+struct StartButtonStyle: ButtonStyle {
+    let enabled: Bool
+    func makeBody(configuration: Configuration) -> some View {
+        // Use tokens to keep look consistent across the app
+        configuration.label
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, DesignTokens.Spacing.m)
+            .background(enabled ? DesignTokens.Colors.neonBlue : DesignTokens.Colors.surface)
+            .foregroundColor(enabled ? DesignTokens.Colors.backgroundDark : DesignTokens.Colors.onMuted)
+            .opacity(configuration.isPressed ? 0.9 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .cornerRadius(DesignTokens.Radius.l)
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.l)
+                    .stroke(DesignTokens.Colors.onMuted.opacity(0.3), lineWidth: 1)
+            )
+    }
+}
+
+
 struct ResultView: View {
     let mode: GameMode
     let score: Int
@@ -7,7 +28,7 @@ struct ResultView: View {
     let incorrectCount: Int?
     let time: Int
     @Binding var currentScreen: AppScreen
-    @State private var highScore: Int?
+    @State private var highScore: Int? = nil
     @State private var isNewHighScore = false
     @State private var animateHighScore = false
     @State private var scorePulse = false
@@ -125,4 +146,3 @@ struct ResultView: View {
 #Preview {
     ResultView(mode: .timeAttack, score: 120, correctCount: 15, incorrectCount: 3, time: 30, currentScreen: .constant(AppScreen.result))
 }
-
