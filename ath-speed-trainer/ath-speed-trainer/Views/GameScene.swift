@@ -8,8 +8,8 @@ struct GameScene: View {
     @State private var showPauseMenu = false
     @State private var countdown: Int = 0
 
-    init(difficulty: Difficulty, mode: GameMode, currentScreen: Binding<AppScreen>, onGameEnd: @escaping (Int, Int, Int?, Int) -> Void) {
-        _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty, mode: mode, onGameEnd: onGameEnd))
+    init(difficulty: Difficulty, mode: GameMode, style: QuestionStyle, currentScreen: Binding<AppScreen>, onGameEnd: @escaping (Int, Int, Int?, Int) -> Void) {
+        _viewModel = StateObject(wrappedValue: GameSceneViewModel(difficulty: difficulty, mode: mode, style: style, onGameEnd: onGameEnd))
         self.mode = mode
         self._currentScreen = currentScreen
     }
@@ -240,5 +240,5 @@ struct GameScene: View {
 }
 
 #Preview {
-    GameScene(difficulty: .easy, mode: .timeAttack, currentScreen: .constant(.game), onGameEnd: { _,_,_,_ in })
+    GameScene(difficulty: .easy, mode: .timeAttack, style: .single, currentScreen: .constant(.game), onGameEnd: { _,_,_,_ in })
 }
