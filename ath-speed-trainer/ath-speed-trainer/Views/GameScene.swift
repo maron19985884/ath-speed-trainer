@@ -1,6 +1,58 @@
 import SwiftUI
 import AVFoundation
 
+// MARK: - Button Styles
+
+private struct CyberKeypadButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(minWidth: 56, minHeight: 56)
+            .background(DesignTokens.Colors.surface)
+            .foregroundColor(DesignTokens.Colors.onDark)
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                    .stroke(DesignTokens.Colors.neonBlue.opacity(0.6), lineWidth: 1)
+            )
+            .cornerRadius(DesignTokens.Radius.m)
+            .keycapShadow()
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .glow(
+                DesignTokens.Colors.neonBlue,
+                radius: configuration.isPressed ? 8 : 0
+            )
+            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
+private struct CyberEnterButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.title)
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .foregroundColor(DesignTokens.Colors.onDark)
+            .background(
+                LinearGradient(
+                    colors: [DesignTokens.Colors.neonBlue, DesignTokens.Colors.neonBlueDeep],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                    .stroke(DesignTokens.Colors.neonBlue.opacity(0.6), lineWidth: 1)
+            )
+            .cornerRadius(DesignTokens.Radius.m)
+            .keycapShadow()
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .glow(
+                DesignTokens.Colors.neonBlue,
+                radius: configuration.isPressed ? 8 : 0
+            )
+            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
 struct GameScene: View {
     @Binding var currentScreen: AppScreen
     private let mode: GameMode
@@ -60,16 +112,16 @@ struct GameScene: View {
                 }
                 .font(DesignTokens.Typography.digitalMono)
                 .padding(.top, DesignTokens.Spacing.s)
-                .padding(.horizontal, DesignTokens.Spacing.l)
 
                 Text(viewModel.problem.question)
-                    .font(DesignTokens.Typography.title)
-                    .glow(DesignTokens.Colors.neonBlue)
+                    .font(.system(size: 36, weight: .bold))
+                    .glow(DesignTokens.Colors.neonBlue, radius: 10)
 
                 Group {
                     if let feedback = viewModel.feedback {
-                        Image(systemName: feedback == .correct ? "checkmark.circle" : "xmark.circle")
+                        Image(systemName: feedback == .correct ? "checkmark.seal.fill" : "xmark.octagon.fill")
                             .foregroundColor(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
+                            .glow(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
                     } else {
                         Image(systemName: "checkmark.circle")
                             .opacity(0)
@@ -79,11 +131,12 @@ struct GameScene: View {
                 .frame(height: 60)
 
                 Text(viewModel.userInput)
-                    .font(DesignTokens.Typography.digitalMono)
+                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
                     .frame(height: 40)
 
                 keypad
             }
+            .padding(DesignTokens.Spacing.l)
             .blur(radius: (showPauseMenu || countdown > 0) ? 3 : 0)
 
             if !viewModel.isPaused && countdown == 0 {
@@ -143,6 +196,10 @@ struct GameScene: View {
                 .padding(DesignTokens.Spacing.m)
                 .background(DesignTokens.Colors.surface)
                 .cornerRadius(DesignTokens.Radius.m)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                        .stroke(DesignTokens.Colors.neonBlue.opacity(0.6), lineWidth: 1)
+                )
             }
 
             if countdown > 0 {
@@ -151,8 +208,8 @@ struct GameScene: View {
                 Text("\(countdown)")
                     .font(DesignTokens.Typography.digitalMono)
                     .scaleEffect(2)
-                    .foregroundColor(DesignTokens.Colors.neonBlue)
-                    .glow(DesignTokens.Colors.neonBlue)
+                    .foregroundColor(DesignTokens.Colors.neonPurple)
+                    .glow(DesignTokens.Colors.neonPurple)
             }
 
             VStack {
@@ -169,8 +226,13 @@ struct GameScene: View {
                         )
                         .padding(.horizontal, DesignTokens.Spacing.l)
                         .padding(.vertical, DesignTokens.Spacing.s)
-                        .background(DesignTokens.Colors.surface.opacity(0.9))
+                        .background(DesignTokens.Colors.surface)
                         .cornerRadius(DesignTokens.Radius.m)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                                .stroke(DesignTokens.Colors.neonBlue.opacity(0.5), lineWidth: 1)
+                        )
+                        .glow(DesignTokens.Colors.neonBlue.opacity(0.4), radius: 6)
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
                 Spacer()
@@ -197,62 +259,44 @@ struct GameScene: View {
                             let number = row * 3 + col
                             Button(action: { viewModel.enterDigit(number) }) {
                                 Text("\(number)")
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .padding(DesignTokens.Spacing.m)
-                                    .background(DesignTokens.Colors.surface)
-                                    .cornerRadius(DesignTokens.Radius.m)
-                                    .keycapShadow()
                             }
-                            .contentShape(Rectangle())
+                            .buttonStyle(CyberKeypadButtonStyle())
+                            .accessibilityLabel(Text("数字\(number)"))
                         }
                     }
                 }
                 HStack(spacing: DesignTokens.Spacing.s) {
                     Button(action: { viewModel.toggleSign() }) {
                         Text("+/-")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding(DesignTokens.Spacing.m)
-                            .background(DesignTokens.Colors.surface)
-                            .cornerRadius(DesignTokens.Radius.m)
-                            .keycapShadow()
                     }
-                    .contentShape(Rectangle())
+                    .buttonStyle(CyberKeypadButtonStyle())
+                    .accessibilityLabel(Text("符号切替"))
+
                     Button(action: { viewModel.enterDigit(0) }) {
                         Text("0")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding(DesignTokens.Spacing.m)
-                            .background(DesignTokens.Colors.surface)
-                            .cornerRadius(DesignTokens.Radius.m)
-                            .keycapShadow()
                     }
-                    .contentShape(Rectangle())
+                    .buttonStyle(CyberKeypadButtonStyle())
+                    .accessibilityLabel(Text("数字0"))
+
                     Button(action: { viewModel.deleteLastDigit() }) {
                         Image(systemName: "delete.left")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding(DesignTokens.Spacing.m)
-                            .background(DesignTokens.Colors.surface)
-                            .cornerRadius(DesignTokens.Radius.m)
-                            .keycapShadow()
                     }
-                    .contentShape(Rectangle())
+                    .buttonStyle(CyberKeypadButtonStyle())
+                    .accessibilityLabel(Text("削除"))
                 }
             }
-            .frame(maxWidth: 200)
 
             Button(action: { viewModel.submit() }) {
-                Text("Enter")
-                    .font(DesignTokens.Typography.title)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, DesignTokens.Spacing.l)
-                    .background(DesignTokens.Colors.neonBlue.opacity(0.2))
-                    .cornerRadius(DesignTokens.Radius.m)
-                    .keycapShadow()
+                Text("ENTER")
             }
+            .buttonStyle(CyberEnterButtonStyle())
             .contentShape(Rectangle())
             .disabled(viewModel.userInput.isEmpty)
             .opacity(viewModel.userInput.isEmpty ? 0.4 : 1.0)
+            .accessibilityLabel(Text("決定"))
 
         }
+        .frame(maxWidth: 280)
     }
 
     private func startCountdown(completion: @escaping () -> Void) {
