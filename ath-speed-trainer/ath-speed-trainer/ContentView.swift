@@ -36,6 +36,7 @@ struct ContentView: View {
                 selectedStyle: $selectedStyle,
                 currentScreen: $currentScreen,
                 startGame: {
+                    guard selectedDifficulty != nil, selectedStyle != nil else { return }
                     currentScreen = .ready
                 }
             )
