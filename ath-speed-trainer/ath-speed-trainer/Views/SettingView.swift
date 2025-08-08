@@ -48,7 +48,7 @@ struct SettingView: View {
         .foregroundColor(DesignTokens.Colors.onDark)
         .padding(.vertical, DesignTokens.Spacing.xl)
         .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
-        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
+        .background(AppBackground())
     }
 }
 

@@ -65,7 +65,7 @@ struct CreditView: View {
             }
         }
         .foregroundColor(DesignTokens.Colors.onDark)
-        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
+        .background(AppBackground())
     }
 }
 

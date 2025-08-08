@@ -31,7 +31,7 @@ struct ModeSelectView: View {
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             .padding(.bottom, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
         }
-        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
+        .background(AppBackground())
     }
 
     private func modeButton(title: String, mode: GameMode) -> some View {
