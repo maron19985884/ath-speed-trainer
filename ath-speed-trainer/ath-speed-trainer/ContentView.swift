@@ -48,6 +48,7 @@ struct ContentView: View {
             GameScene(
                 difficulty: selectedDifficulty ?? .easy,
                 mode: selectedMode ?? .timeAttack,
+                style: selectedStyle ?? .single,
                 currentScreen: $currentScreen,
                 onGameEnd: { score, correct, incorrect, time in
                     finalScore = score

@@ -23,16 +23,18 @@ final class GameSceneViewModel: ObservableObject {
 
     private let difficulty: Difficulty
     private let mode: GameMode
+    private let style: QuestionStyle
     private var timer: Timer?
     private let questionLimit = 10
     private var isGameOver = false
     private let onGameEnd: ((Int, Int, Int?, Int) -> Void)?
 
-    init(difficulty: Difficulty, mode: GameMode, onGameEnd: ((Int, Int, Int?, Int) -> Void)? = nil) {
+    init(difficulty: Difficulty, mode: GameMode, style: QuestionStyle, onGameEnd: ((Int, Int, Int?, Int) -> Void)? = nil) {
         self.difficulty = difficulty
         self.mode = mode
+        self.style = style
         self.onGameEnd = onGameEnd
-        self.problem = ProblemGenerator.generate(difficulty: difficulty, score: 0)
+        self.problem = ProblemGenerator.generate(difficulty: difficulty, score: 0, style: style)
     }
 
     func startGame() {
@@ -47,7 +49,7 @@ final class GameSceneViewModel: ObservableObject {
         showCombo = false
         isGameOver = false
         isPaused = false
-        problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
+        problem = ProblemGenerator.generate(difficulty: difficulty, score: score, style: style)
 
         switch mode {
         case .timeAttack:
@@ -172,7 +174,7 @@ final class GameSceneViewModel: ObservableObject {
                 return
             }
 
-            problem = ProblemGenerator.generate(difficulty: difficulty, score: score)
+            problem = ProblemGenerator.generate(difficulty: difficulty, score: score, style: style)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                 self.feedback = nil
             }
