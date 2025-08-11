@@ -13,25 +13,7 @@ struct DifficultySelectView: View {
         ZStack {
 
             VStack(spacing: 0) {
-                // 左上：モード選択に戻る
-                HStack {
-                    Button(action: { currentScreen = .modeSelect }) {
-                        Text("モード選択に戻る")
-                            .font(DesignTokens.Typography.body)
-                            .foregroundColor(DesignTokens.Colors.onDark)
-                            .padding(DesignTokens.Spacing.s)
-                            .background(DesignTokens.Colors.surface)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
-                                    .stroke(DesignTokens.Colors.neonBlue.opacity(0.5), lineWidth: 1)
-                            )
-                            .cornerRadius(DesignTokens.Radius.m)
-                    }
-                    .contentShape(Rectangle())
-                    Spacer()
-                }
-                .padding(.top, DesignTokens.Spacing.l)
-                .padding(.horizontal, DesignTokens.Spacing.l)
+                BackButton { currentScreen = .modeSelect }
 
                 // スクロール対応（小型端末での縦不足対策）
                 ScrollView {
