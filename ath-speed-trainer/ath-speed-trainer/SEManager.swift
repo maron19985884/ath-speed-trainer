@@ -3,14 +3,15 @@ import AVFoundation
 import AudioToolbox
 
 enum SESound: SystemSoundID {
-    case button      = 1104  // Tock（クリック）
-    case decide      = 1057  // 決定/軽いビープ
-    case success     = 1117  // 成功
-    case failure     = 1118  // 失敗
-    case countdown   = 1057  // カウント刻み
-    case start       = 1113  // 開始（必要に応じ調整）
-    case finish      = 1001  // 完了/終了（必要に応じ調整）
+    case button    = 1052  // SIMToolkit General Beep (定番避け)
+    case decide    = 1024  // Descent (エッジある選択音)
+    case success   = 1322  // Fanfare (通知系だが少し控えめ)
+    case failure   = 1053  // SIMToolkit NegativeACK (やや硬質なエラー音)
+    case countdown = 1033  // Telegraph (カウントや警告用途でも目立ちすぎず)
+    case start     = 1021  // Bloom (柔らかい開始音)
+    case finish    = 1054  // Noir (終了音として静かめに)
 }
+
 
 final class SEManager {
     static let shared = SEManager()
