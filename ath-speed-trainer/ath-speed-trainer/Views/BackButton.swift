@@ -11,7 +11,10 @@ struct BackButton: View {
 
     var body: some View {
         HStack {
-            Button(action: action) {
+            Button(action: {
+                SEManager.shared.play(.button)
+                action()
+            }) {
                 HStack(spacing: DesignTokens.Spacing.s) {
                     Image(systemName: "chevron.left.circle.fill")
                         .foregroundColor(DesignTokens.Colors.neonBlue)

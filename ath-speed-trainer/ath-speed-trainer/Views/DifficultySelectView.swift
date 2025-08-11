@@ -60,7 +60,10 @@ struct DifficultySelectView: View {
                         .padding(.horizontal, DesignTokens.Spacing.l)
 
                         // MARK: ゲーム開始
-                        Button(action: startGame) {
+                        Button(action: {
+                            SEManager.shared.play(.button)
+                            startGame()
+                        }) {
                             Text("ゲーム開始")
                                 .font(DesignTokens.Typography.title)
                                 .bold()
@@ -86,7 +89,10 @@ struct DifficultySelectView: View {
 
     private func difficultyButton(title: String, difficulty: Difficulty) -> some View {
         let selected = selectedDifficulty == difficulty
-        return Button(action: { selectedDifficulty = difficulty }) {
+        return Button(action: {
+            SEManager.shared.play(.button)
+            selectedDifficulty = difficulty
+        }) {
             Text(title)
                 .font(DesignTokens.Typography.title)
                 .bold()
@@ -101,7 +107,10 @@ struct DifficultySelectView: View {
 
     private func styleButton(title: String, style: QuestionStyle) -> some View {
         let selected = selectedStyle == style
-        return Button(action: { selectedStyle = style }) {
+        return Button(action: {
+            SEManager.shared.play(.button)
+            selectedStyle = style
+        }) {
             Text(title)
                 .font(DesignTokens.Typography.title)
                 .bold()

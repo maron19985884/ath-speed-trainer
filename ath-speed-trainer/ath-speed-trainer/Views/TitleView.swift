@@ -25,6 +25,7 @@ struct TitleView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
+            SEManager.shared.play(.button)
             currentScreen = .modeSelect
         }
     }

@@ -127,7 +127,10 @@ struct ResultView: View {
                 }
 
                 VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
-                    Button(action: { currentScreen = .ready }) {
+                    Button(action: {
+                        SEManager.shared.play(.button)
+                        currentScreen = .ready
+                    }) {
                         Text("もう一度プレイ")
                             .font(DesignTokens.Typography.title)
                     }

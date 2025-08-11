@@ -23,6 +23,8 @@ struct ReadyCountdownView: View {
     /// 1秒ごとに文字を切り替え、終了後にゲーム画面へ遷移
     private func startCountdown() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            // indexが進むたびに鳴らす
+            SEManager.shared.play(index < steps.count - 1 ? .countdown : .start)
             if index < steps.count - 1 {
                 index += 1
             } else {
