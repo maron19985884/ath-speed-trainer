@@ -10,42 +10,73 @@ struct DifficultySelectView: View {
     private let minCardWidth: CGFloat = 140
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack {
             BackgroundView()
 
-            GeometryReader { geometry in
-                let verticalSpacing = min(DesignTokens.Spacing.xl, geometry.size.height * 0.05)
+            VStack(spacing: 0) {
+                // 左上：メニューへ戻る
+                HStack {
+                    Button(action: { currentScreen = .modeSelect }) {
+                        Text("メニューに戻る")
+                            .font(DesignTokens.Typography.body)
+                            .foregroundColor(DesignTokens.Colors.onDark)
+                            .padding(DesignTokens.Spacing.s)
+                            .background(DesignTokens.Colors.surface)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                                    .stroke(DesignTokens.Colors.neonBlue.opacity(0.5), lineWidth: 1)
+                            )
+                            .cornerRadius(DesignTokens.Radius.m)
+                    }
+                    .contentShape(Rectangle())
+                    Spacer()
+                }
+                .padding(.top, DesignTokens.Spacing.l)
+                .padding(.horizontal, DesignTokens.Spacing.l)
 
+                // スクロール対応（小型端末での縦不足対策）
                 ScrollView {
-                    VStack(spacing: verticalSpacing) {
+                    VStack(spacing: DesignTokens.Spacing.xl) {
                         Text("難易度・出題形式の選択")
                             .font(DesignTokens.Typography.title)
                             .foregroundColor(DesignTokens.Colors.onDark)
-                            .padding(.top, verticalSpacing)
+                            .padding(.top, DesignTokens.Spacing.xl)
 
-                        selectionSection(title: "難易度") {
+                        // MARK: 難易度
+                        VStack(spacing: DesignTokens.Spacing.m) {
+                            Text("難易度")
+                                .font(DesignTokens.Typography.body)
+                                .foregroundColor(DesignTokens.Colors.onDark)
+
                             LazyVGrid(
                                 columns: [GridItem(.adaptive(minimum: minCardWidth), spacing: DesignTokens.Spacing.m)],
+                                alignment: .center,
                                 spacing: DesignTokens.Spacing.m
                             ) {
                                 difficultyButton(title: "Easy",   difficulty: .easy)
                                 difficultyButton(title: "Normal", difficulty: .normal)
                                 difficultyButton(title: "Hard",   difficulty: .hard)
                             }
-                            .frame(maxWidth: .infinity)
                         }
+                        .padding(.horizontal, DesignTokens.Spacing.l)
 
-                        selectionSection(title: "出題形式") {
+                        // MARK: 出題形式
+                        VStack(spacing: DesignTokens.Spacing.m) {
+                            Text("出題形式")
+                                .font(DesignTokens.Typography.body)
+                                .foregroundColor(DesignTokens.Colors.onDark)
+
                             LazyVGrid(
                                 columns: [GridItem(.adaptive(minimum: minCardWidth), spacing: DesignTokens.Spacing.m)],
+                                alignment: .center,
                                 spacing: DesignTokens.Spacing.m
                             ) {
                                 styleButton(title: "単発計算", style: .single)
                                 styleButton(title: "連続計算",   style: .sequence)
                                 styleButton(title: "ランダム計算", style: .mixed)
                             }
-                            .frame(maxWidth: .infinity)
                         }
+                        .padding(.horizontal, DesignTokens.Spacing.l)
 
                         // MARK: ゲーム開始
                         Button(action: startGame) {
@@ -62,28 +93,12 @@ struct DifficultySelectView: View {
                         )
                         .disabled(selectedDifficulty == nil || selectedStyle == nil)
                         .padding(.horizontal, DesignTokens.Spacing.l)
-                        .padding(.bottom, verticalSpacing)
+                        .padding(.bottom, DesignTokens.Spacing.xl)
                     }
-                    .frame(maxWidth: 700)
-                    .padding(.vertical, verticalSpacing)
+                    .frame(maxWidth: 700) // タブレット/大画面での可読幅制御
+                    .padding(.vertical, DesignTokens.Spacing.l)
                 }
             }
-
-            Button(action: { currentScreen = .modeSelect }) {
-                Text("メニューに戻る")
-                    .font(DesignTokens.Typography.body)
-                    .foregroundColor(DesignTokens.Colors.onDark)
-                    .padding(DesignTokens.Spacing.s)
-                    .background(DesignTokens.Colors.surface)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
-                            .stroke(DesignTokens.Colors.neonBlue.opacity(0.5), lineWidth: 1)
-                    )
-                    .cornerRadius(DesignTokens.Radius.m)
-            }
-            .contentShape(Rectangle())
-            .padding(.top, DesignTokens.Spacing.l)
-            .padding(.leading, DesignTokens.Spacing.l)
         }
     }
 
@@ -115,17 +130,6 @@ struct DifficultySelectView: View {
         .buttonStyle(DifficultyCardButtonStyle(isSelected: selected))
         .accessibilityLabel(Text(selected ? "\(title) 選択中" : title))
         .contentShape(Rectangle())
-    }
-
-    private func selectionSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(spacing: DesignTokens.Spacing.m) {
-            Text(title)
-                .font(DesignTokens.Typography.body)
-                .foregroundColor(DesignTokens.Colors.onDark)
-            content()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, DesignTokens.Spacing.l)
     }
 }
 
