@@ -52,7 +52,7 @@ struct DifficultySelectView: View {
                         .padding(.horizontal, hPadding)
 
                         Button(action: {
-                            SEManager.shared.play(.countdown)
+         
                             startGame()
                         }) {
                             Text("ゲーム開始")
@@ -81,7 +81,7 @@ struct DifficultySelectView: View {
     private func difficultyButton(title: String, difficulty: Difficulty) -> some View {
         let selected = selectedDifficulty == difficulty
         return Button(action: {
-            SEManager.shared.play(.button)
+          
             selectedDifficulty = difficulty
         }) {
             Text(title)
@@ -99,7 +99,7 @@ struct DifficultySelectView: View {
     private func styleButton(title: String, style: QuestionStyle) -> some View {
         let selected = selectedStyle == style
         return Button(action: {
-            SEManager.shared.play(.button)
+        
             selectedStyle = style
         }) {
             Text(title)

@@ -4,15 +4,10 @@ import AudioToolbox
 /// アプリ内で使用する効果音を管理する列挙型
 /// ID はすべてバイブレーションを伴わない SystemSoundID を採用する
 enum SESound: SystemSoundID {
-    case button    = 1052  // SIMToolkit General Beep
-    case decide    = 1024  // Descent
     case success   = 1322  // Anticipate
     case failure   = 1053  // SIMToolkit NegativeACK
-    case countdown = 1033  // Telegraph
-    case start     = 1021  // Bloom
     case finish    = 1054  // SIMToolkit SMSReceived
 }
-
 
 final class SEManager {
     static let shared = SEManager()

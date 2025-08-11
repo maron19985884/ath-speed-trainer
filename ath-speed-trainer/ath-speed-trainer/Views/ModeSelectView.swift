@@ -44,7 +44,7 @@ struct ModeSelectView: View {
     // モードボタン（大）
     private func modeButton(title: String, mode: GameMode) -> some View {
         Button(action: {
-            SEManager.shared.play(.button)
+         
             selectedMode = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 selectedMode = mode
@@ -60,7 +60,7 @@ struct ModeSelectView: View {
     // サブメニュー（小）
     private func smallMenuButton(title: String, screen: AppScreen) -> some View {
         Button(action: {
-            SEManager.shared.play(.button)
+           
             currentScreen = screen
         }) {
             Text(title)

@@ -12,7 +12,7 @@ struct BackButton: View {
     var body: some View {
         HStack {
             Button(action: {
-                SEManager.shared.play(.button)
+             
                 action()
             }) {
                 HStack(spacing: DesignTokens.Spacing.s) {
