@@ -7,7 +7,7 @@ struct ModeSelectView: View {
     var body: some View {
         VStack(spacing: DesignTokens.Spacing.xl) {
 
-            // タイトル画像を削除し、見出しテキストに変更
+            // 見出し
             Text("モード選択")
                 .font(DesignTokens.Typography.title)
                 .foregroundColor(DesignTokens.Colors.onDark)
@@ -15,6 +15,7 @@ struct ModeSelectView: View {
                 .padding(.top, DesignTokens.Spacing.xl)
                 .padding(.bottom, DesignTokens.Spacing.l)
 
+            // モード選択ボタン（大サイズ）
             VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
                 modeButton(title: "10問正解スピード", mode: .correctCount)
@@ -24,9 +25,11 @@ struct ModeSelectView: View {
 
             Spacer()
 
-            VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
-                menuButton(title: "設定", screen: .setting)
-                menuButton(title: "クレジット", screen: .credit)
+            // サブメニュー（小サイズ）
+            VStack(spacing: DesignTokens.Spacing.s) {
+                smallMenuButton(title: "設定", screen: .setting)
+                smallMenuButton(title: "クレジット", screen: .credit)
+                smallMenuButton(title: "タイトルへ戻る", screen: .title)
             }
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             .padding(.bottom, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
@@ -34,6 +37,7 @@ struct ModeSelectView: View {
         .appBackground()
     }
 
+    // モードボタン（大）
     private func modeButton(title: String, mode: GameMode) -> some View {
         Button(action: {
             selectedMode = nil
@@ -45,20 +49,24 @@ struct ModeSelectView: View {
                 .font(DesignTokens.Typography.title)
                 .bold()
         }
-        .buttonStyle(HologramButtonStyle())
+        .buttonStyle(HologramButtonStyle()) // 既存大サイズ
     }
 
-    private func menuButton(title: String, screen: AppScreen) -> some View {
+    // サブメニュー（小）
+    private func smallMenuButton(title: String, screen: AppScreen) -> some View {
         Button(action: { currentScreen = screen }) {
             Text(title)
-                .font(DesignTokens.Typography.body)
+                .font(.system(size: 15, weight: .semibold))
                 .bold()
+                .padding(.vertical, 6)
+                .padding(.horizontal, 14)
+                .frame(minWidth: 120, maxWidth: .infinity, minHeight: 56)
         }
-        .buttonStyle(HologramButtonStyle())
+        .buttonStyle(SmallHologramButtonStyle())
     }
 }
 
-// 既存ボタンスタイル
+// 大ボタンスタイル（既存）
 struct HologramButtonStyle: ButtonStyle {
     var isSelected: Bool = false
 
@@ -78,6 +86,28 @@ struct HologramButtonStyle: ButtonStyle {
             .cornerRadius(DesignTokens.Radius.l)
             .glow(color, radius: radius)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
+// 小ボタンスタイル
+struct SmallHologramButtonStyle: ButtonStyle {
+    var isSelected: Bool = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        let color = isSelected ? DesignTokens.Colors.neonPurple : DesignTokens.Colors.neonBlue
+        let radius: CGFloat = (isSelected || configuration.isPressed) ? 8 : 4
+
+        return configuration.label
+            .background(DesignTokens.Colors.surface)
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
+                    .stroke(color.opacity(0.7), lineWidth: 1)
+            )
+            .foregroundColor(DesignTokens.Colors.onDark)
+            .cornerRadius(DesignTokens.Radius.m)
+            .glow(color, radius: radius)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
