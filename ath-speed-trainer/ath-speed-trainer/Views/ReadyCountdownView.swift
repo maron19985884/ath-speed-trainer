@@ -16,7 +16,7 @@ struct ReadyCountdownView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .foregroundColor(DesignTokens.Colors.neonBlue)
             .glow(DesignTokens.Colors.neonBlue)
-            .background(AppBackground())
+            .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
             .onAppear(perform: startCountdown)
     }
 
