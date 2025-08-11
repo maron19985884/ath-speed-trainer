@@ -66,79 +66,116 @@ struct GameScene: View {
         self._currentScreen = currentScreen
     }
 
-    private var modeLabel: String {
-        switch mode {
-        case .timeAttack: return "タイムアタック"
-        case .correctCount: return "10問正解タイムアタック"
-        case .noMistake: return "ミス耐久"
+    var body: some View {
+        GeometryReader { geo in
+            let isLandscape = geo.isLandscape
+
+            ZStack {
+                if isLandscape {
+                    HStack(alignment: .center, spacing: DesignTokens.Spacing.l) {
+                        VStack(spacing: DesignTokens.Spacing.m) {
+                            headerSection
+                            problemSection
+                            Text(viewModel.userInput)
+                                .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                                .frame(height: 40)
+                            Spacer(minLength: 0)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                        .padding(DesignTokens.Spacing.l)
+
+                        VStack {
+                            keypad
+                                .frame(maxWidth: 320)
+                        }
+                        .padding(DesignTokens.Spacing.l)
+                    }
+                } else {
+                    VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
+                        headerSection
+                        Text(viewModel.problem.question)
+                            .font(.system(size: 36, weight: .bold))
+                            .glow(DesignTokens.Colors.neonBlue, radius: 10)
+                        feedbackIconSection
+                            .frame(height: 60)
+                        Text(viewModel.userInput)
+                            .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                            .frame(height: 40)
+                        keypad
+                            .frame(maxWidth: 280)
+                    }
+                    .padding(DesignTokens.Spacing.l)
+                }
+
+                overlaysSection
+            }
+            .foregroundColor(DesignTokens.Colors.onDark)
+            .appBackground()
+            .animation(.easeInOut, value: viewModel.comboCount)
+            .onAppear { viewModel.startGame() }
         }
     }
 
-    var body: some View {
-        ZStack {
-            VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
-                Text(modeLabel)
-                    .font(DesignTokens.Typography.body)
-                    .padding(.top, DesignTokens.Spacing.l)
-
-                HStack {
-                    if mode == .timeAttack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Score: \(viewModel.score)")
-                            if let delta = viewModel.scoreDelta {
-                                Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
-                                    .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
-                            } else {
-                                Text(" ")
-                                    .hidden()
-                            }
-                        }
-                    } else if mode == .noMistake || mode == .correctCount {
-                        Text("正解数: \(viewModel.correctCount)")
-                    }
-                    Spacer()
-                    if mode != .noMistake {
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text("Time: \(viewModel.timeRemaining)")
-                            if let delta = viewModel.timeDelta {
-                                Text((delta > 0 ? "+\(delta)" : "\(delta)") + "秒")
-                                    .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
-                            } else {
-                                Text(" ")
-                                    .hidden()
-                            }
-                        }
-                    }
-                }
-                .font(DesignTokens.Typography.digitalMono)
-                .padding(.top, DesignTokens.Spacing.s)
-
-                Text(viewModel.problem.question)
-                    .font(.system(size: 36, weight: .bold))
-                    .glow(DesignTokens.Colors.neonBlue, radius: 10)
-
-                Group {
-                    if let feedback = viewModel.feedback {
-                        Image(systemName: feedback == .correct ? "checkmark.seal.fill" : "xmark.octagon.fill")
-                            .foregroundColor(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
-                            .glow(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
+    private var headerSection: some View {
+        HStack {
+            if mode == .timeAttack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Score: \(viewModel.score)")
+                    if let delta = viewModel.scoreDelta {
+                        Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
+                            .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
                     } else {
-                        Image(systemName: "checkmark.circle")
-                            .opacity(0)
+                        Text(" ")
+                            .hidden()
                     }
                 }
-                .font(DesignTokens.Typography.digitalMono)
-                .frame(height: 60)
-
-                Text(viewModel.userInput)
-                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                    .frame(height: 40)
-
-                keypad
+            } else if mode == .noMistake || mode == .correctCount {
+                Text("正解数: \(viewModel.correctCount)")
             }
-            .padding(DesignTokens.Spacing.l)
-            .blur(radius: (showPauseMenu || countdown > 0) ? 3 : 0)
+            Spacer()
+            if mode != .noMistake {
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Time: \(viewModel.timeRemaining)")
+                    if let delta = viewModel.timeDelta {
+                        Text((delta > 0 ? "+\(delta)" : "\(delta)") + "秒")
+                            .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
+                    } else {
+                        Text(" ")
+                            .hidden()
+                    }
+                }
+            }
+        }
+        .font(DesignTokens.Typography.digitalMono)
+        .padding(.top, DesignTokens.Spacing.s)
+    }
 
+    private var feedbackIconSection: some View {
+        Group {
+            if let feedback = viewModel.feedback {
+                Image(systemName: feedback == .correct ? "checkmark.seal.fill" : "xmark.octagon.fill")
+                    .foregroundColor(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
+                    .glow(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
+            } else {
+                Image(systemName: "checkmark.circle")
+                    .opacity(0)
+            }
+        }
+        .font(DesignTokens.Typography.digitalMono)
+    }
+
+    private var problemSection: some View {
+        VStack(spacing: DesignTokens.Spacing.s) {
+            Text(viewModel.problem.question)
+                .font(.system(size: 36, weight: .bold))
+                .glow(DesignTokens.Colors.neonBlue, radius: 10)
+            feedbackIconSection
+                .frame(height: 60)
+        }
+    }
+
+    private var overlaysSection: some View {
+        ZStack {
             if !viewModel.isPaused && countdown == 0 {
                 VStack {
                     HStack {
@@ -238,16 +275,11 @@ struct GameScene: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.top, DesignTokens.Spacing.xl * 3)          // 入力欄と被らないよう上から少し下げる
-            .allowsHitTesting(false)     // タップ妨害を防止
+            .padding(.top, DesignTokens.Spacing.xl * 3)
+            .allowsHitTesting(false)
             .zIndex(2)
             .animation(.easeInOut, value: viewModel.showCombo)
-
         }
-        .foregroundColor(DesignTokens.Colors.onDark)
-        .appBackground()
-        .animation(.easeInOut, value: viewModel.comboCount)
-        .onAppear { viewModel.startGame() }
     }
 
     private var keypad: some View {
@@ -296,7 +328,6 @@ struct GameScene: View {
             .accessibilityLabel(Text("決定"))
 
         }
-        .frame(maxWidth: 280)
     }
 
     private func startCountdown(completion: @escaping () -> Void) {
