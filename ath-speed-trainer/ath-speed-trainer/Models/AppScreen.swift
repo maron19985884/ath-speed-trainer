@@ -1,4 +1,5 @@
 enum AppScreen {
+    case title
     case modeSelect
     case difficultySelect
     case ready
