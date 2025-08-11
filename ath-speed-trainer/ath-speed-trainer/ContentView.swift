@@ -78,7 +78,7 @@ struct ContentView: View {
         }
         }
         .foregroundColor(DesignTokens.Colors.onDark)
-        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
+        .appBackground()
     }
 }
 
