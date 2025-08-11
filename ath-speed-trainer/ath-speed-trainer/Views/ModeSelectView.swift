@@ -5,36 +5,40 @@ struct ModeSelectView: View {
     @Binding var selectedMode: GameMode?
 
     var body: some View {
-        VStack(spacing: DesignTokens.Spacing.xl) {
+        GeometryReader { geo in
+            let isLandscape = geo.isLandscape
+            let sidePadding = isLandscape ? (DesignTokens.Spacing.l + DesignTokens.Spacing.xl + 20) : (DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
+            let maxWidth: CGFloat = isLandscape ? 700 : .infinity
 
-            // 見出し
-            Text("モード選択")
-                .font(DesignTokens.Typography.title)
-                .foregroundColor(DesignTokens.Colors.onDark)
-                .glow(DesignTokens.Colors.neonBlue, radius: 8)
-                .padding(.top, DesignTokens.Spacing.xl)
-                .padding(.bottom, DesignTokens.Spacing.l)
+            VStack(spacing: DesignTokens.Spacing.xl) {
+                Text("モード選択")
+                    .font(DesignTokens.Typography.title)
+                    .foregroundColor(DesignTokens.Colors.onDark)
+                    .glow(DesignTokens.Colors.neonBlue, radius: 8)
+                    .padding(.top, DesignTokens.Spacing.xl)
+                    .padding(.bottom, DesignTokens.Spacing.l)
 
-            // モード選択ボタン（大サイズ）
-            VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
-                modeButton(title: "タイムアタック", mode: .timeAttack)
-                modeButton(title: "10問正解スピード", mode: .correctCount)
-                modeButton(title: "ミス耐久", mode: .noMistake)
+                VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
+                    modeButton(title: "タイムアタック", mode: .timeAttack)
+                    modeButton(title: "10問正解スピード", mode: .correctCount)
+                    modeButton(title: "ミス耐久", mode: .noMistake)
+                }
+                .frame(maxWidth: maxWidth)
+                .padding(.horizontal, sidePadding)
+
+                Spacer()
+
+                VStack(spacing: DesignTokens.Spacing.s) {
+                    smallMenuButton(title: "設定", screen: .setting)
+                    smallMenuButton(title: "クレジット", screen: .credit)
+                    smallMenuButton(title: "タイトルへ戻る", screen: .title)
+                }
+                .frame(maxWidth: maxWidth)
+                .padding(.horizontal, sidePadding)
+                .padding(.bottom, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
             }
-            .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
-
-            Spacer()
-
-            // サブメニュー（小サイズ）
-            VStack(spacing: DesignTokens.Spacing.s) {
-                smallMenuButton(title: "設定", screen: .setting)
-                smallMenuButton(title: "クレジット", screen: .credit)
-                smallMenuButton(title: "タイトルへ戻る", screen: .title)
-            }
-            .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
-            .padding(.bottom, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
+            .appBackground()
         }
-        .appBackground()
     }
 
     // モードボタン（大）

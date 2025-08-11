@@ -6,32 +6,27 @@ struct DifficultySelectView: View {
     @Binding var currentScreen: AppScreen
     var startGame: () -> Void
 
-    // 最小カード幅：小型iPhoneでも2列に折り返しやすい値
-    private let minCardWidth: CGFloat = 140
-
     var body: some View {
-        ZStack {
+        GeometryReader { geo in
+            let isLandscape = geo.isLandscape
+            let minCardWidth: CGFloat = isLandscape ? 200 : 140
+            let hPadding: CGFloat = isLandscape ? 32 : DesignTokens.Spacing.l
 
             VStack(spacing: 0) {
                 BackButton { currentScreen = .modeSelect }
 
-                // スクロール対応（小型端末での縦不足対策）
                 ScrollView {
                     VStack(spacing: DesignTokens.Spacing.xl) {
                         Text("難易度・出題形式の選択")
                             .font(DesignTokens.Typography.title)
-                            .foregroundColor(DesignTokens.Colors.onDark)
                             .padding(.top, DesignTokens.Spacing.xl)
 
-                        // MARK: 難易度
                         VStack(spacing: DesignTokens.Spacing.m) {
                             Text("難易度")
                                 .font(DesignTokens.Typography.body)
-                                .foregroundColor(DesignTokens.Colors.onDark)
 
                             LazyVGrid(
                                 columns: [GridItem(.adaptive(minimum: minCardWidth), spacing: DesignTokens.Spacing.m)],
-                                alignment: .center,
                                 spacing: DesignTokens.Spacing.m
                             ) {
                                 difficultyButton(title: "Easy",   difficulty: .easy)
@@ -39,29 +34,24 @@ struct DifficultySelectView: View {
                                 difficultyButton(title: "Hard",   difficulty: .hard)
                             }
                         }
-                        .padding(.horizontal, DesignTokens.Spacing.l)
+                        .padding(.horizontal, hPadding)
 
-                        // MARK: 出題形式
                         VStack(spacing: DesignTokens.Spacing.m) {
                             Text("出題形式")
                                 .font(DesignTokens.Typography.body)
-                                .foregroundColor(DesignTokens.Colors.onDark)
 
                             LazyVGrid(
                                 columns: [GridItem(.adaptive(minimum: minCardWidth), spacing: DesignTokens.Spacing.m)],
-                                alignment: .center,
                                 spacing: DesignTokens.Spacing.m
                             ) {
-                                styleButton(title: "単発計算", style: .single)
-                                styleButton(title: "連続計算",   style: .sequence)
+                                styleButton(title: "単発計算",  style: .single)
+                                styleButton(title: "連続計算",  style: .sequence)
                                 styleButton(title: "ランダム計算", style: .mixed)
                             }
                         }
-                        .padding(.horizontal, DesignTokens.Spacing.l)
+                        .padding(.horizontal, hPadding)
 
-                        // MARK: ゲーム開始
                         Button(action: {
-                            // Play the same sound as the countdown when starting the game
                             SEManager.shared.play(.countdown)
                             startGame()
                         }) {
@@ -77,15 +67,15 @@ struct DifficultySelectView: View {
                             )
                         )
                         .disabled(selectedDifficulty == nil || selectedStyle == nil)
-                        .padding(.horizontal, DesignTokens.Spacing.l)
+                        .padding(.horizontal, isLandscape ? 48 : DesignTokens.Spacing.l)
                         .padding(.bottom, DesignTokens.Spacing.xl)
                     }
-                    .frame(maxWidth: 700) // タブレット/大画面での可読幅制御
+                    .frame(maxWidth: isLandscape ? 900 : 700)
                     .padding(.vertical, DesignTokens.Spacing.l)
                 }
             }
+            .appBackground()
         }
-        .appBackground()
     }
 
     private func difficultyButton(title: String, difficulty: Difficulty) -> some View {
