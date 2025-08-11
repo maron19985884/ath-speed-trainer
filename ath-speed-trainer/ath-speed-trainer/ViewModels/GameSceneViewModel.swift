@@ -142,6 +142,10 @@ final class GameSceneViewModel: ObservableObject {
             feedback = .correct
             correctCount += 1
             SEManager.shared.play(.success)
+            // Vibrate only on correct answers when enabled
+            if isVibrationOn {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            }
             if mode == .timeAttack {
                 comboCount += 1
                 showCombo = comboCount >= 2

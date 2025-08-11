@@ -61,7 +61,8 @@ struct DifficultySelectView: View {
 
                         // MARK: ゲーム開始
                         Button(action: {
-                            SEManager.shared.play(.button)
+                            // Play the same sound as the countdown when starting the game
+                            SEManager.shared.play(.countdown)
                             startGame()
                         }) {
                             Text("ゲーム開始")
