@@ -1,15 +1,16 @@
 import Foundation
-import AVFoundation
 import AudioToolbox
 
+/// アプリ内で使用する効果音を管理する列挙型
+/// ID はすべてバイブレーションを伴わない SystemSoundID を採用する
 enum SESound: SystemSoundID {
-    case button    = 1052  // SIMToolkit General Beep (定番避け)
-    case decide    = 1024  // Descent (エッジある選択音)
-    case success   = 1322  // Fanfare (通知系だが少し控えめ)
-    case failure   = 1053  // SIMToolkit NegativeACK (やや硬質なエラー音)
-    case countdown = 1033  // Telegraph (カウントや警告用途でも目立ちすぎず)
-    case start     = 1021  // Bloom (柔らかい開始音)
-    case finish    = 1054  // Noir (終了音として静かめに)
+    case button    = 1052  // SIMToolkit General Beep
+    case decide    = 1024  // Descent
+    case success   = 1322  // Anticipate
+    case failure   = 1053  // SIMToolkit NegativeACK
+    case countdown = 1033  // Telegraph
+    case start     = 1021  // Bloom
+    case finish    = 1054  // SIMToolkit SMSReceived
 }
 
 
@@ -21,6 +22,8 @@ final class SEManager {
         UserDefaults.standard.object(forKey: "isSeOn") as? Bool ?? true
     }
 
+    /// 指定された効果音を再生する
+    /// - Note: `SESound` 以外の任意IDを再生しない設計で、振動は発生しない
     func play(_ sound: SESound) {
         guard isSeOn else { return }
         AudioServicesPlaySystemSound(sound.rawValue)
