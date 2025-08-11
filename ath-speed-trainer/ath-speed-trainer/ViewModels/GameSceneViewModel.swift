@@ -1,5 +1,4 @@
 import SwiftUI
-import AudioToolbox
 
 final class GameSceneViewModel: ObservableObject {
     @Published var problem: ArithmeticProblem
@@ -15,8 +14,6 @@ final class GameSceneViewModel: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var comboCount: Int = 0
     @Published var showCombo: Bool = false
-
-    @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
 
     enum Feedback { case correct, wrong }
 
@@ -142,10 +139,6 @@ final class GameSceneViewModel: ObservableObject {
             feedback = .correct
             correctCount += 1
             SEManager.shared.play(.success)
-            // Vibrate only on correct answers when enabled
-            if isVibrationOn {
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            }
             if mode == .timeAttack {
                 comboCount += 1
                 showCombo = comboCount >= 2
@@ -186,9 +179,6 @@ final class GameSceneViewModel: ObservableObject {
             comboCount = 0
             showCombo = false
             SEManager.shared.play(.failure)
-            if isVibrationOn {
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            }
             if mode == .timeAttack {
                 withAnimation {
                     score -= 5

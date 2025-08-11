@@ -3,7 +3,6 @@ import SwiftUI
 struct SettingView: View {
     @Binding var currentScreen: AppScreen
     @AppStorage("isSeOn") private var isSeOn: Bool = true
-    @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.xl) {
@@ -16,14 +15,6 @@ struct SettingView: View {
 
                 VStack(spacing: DesignTokens.Spacing.m) {
                     Toggle("効果音（SE）", isOn: $isSeOn)
-                        .padding()
-                        .background(DesignTokens.Colors.surface)
-                        .cornerRadius(DesignTokens.Radius.m)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
-                                .stroke(DesignTokens.Colors.neonBlue, lineWidth: 1)
-                        )
-                    Toggle("バイブレーション", isOn: $isVibrationOn)
                         .padding()
                         .background(DesignTokens.Colors.surface)
                         .cornerRadius(DesignTokens.Radius.m)
