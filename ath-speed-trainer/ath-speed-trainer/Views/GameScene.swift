@@ -71,40 +71,49 @@ struct GameScene: View {
             let isLandscape = geo.isLandscape
 
             ZStack {
-                if isLandscape {
-                    HStack(alignment: .center, spacing: DesignTokens.Spacing.l) {
-                        VStack(spacing: DesignTokens.Spacing.m) {
-                            headerSection
+                VStack(spacing: 0) {
+                    GameTopBar(
+                        mode: mode,
+                        score: viewModel.score,
+                        scoreDelta: viewModel.scoreDelta,
+                        timeRemaining: viewModel.timeRemaining,
+                        timeDelta: viewModel.timeDelta,
+                        correctCount: viewModel.correctCount,
+                        onPause: {
+                            viewModel.pauseGame()
+                            showPauseMenu = true
+                        }
+                    )
+
+                    if isLandscape {
+                        HStack(alignment: .center, spacing: DesignTokens.Spacing.l) {
+                            VStack(spacing: DesignTokens.Spacing.m) {
+                                problemSection
+                                Text(viewModel.userInput)
+                                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                                    .frame(height: 40)
+                                Spacer(minLength: 0)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .topLeading)
+                            .padding(DesignTokens.Spacing.l)
+
+                            VStack {
+                                keypad
+                                    .frame(maxWidth: 320)
+                            }
+                            .padding(DesignTokens.Spacing.l)
+                        }
+                    } else {
+                        VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                             problemSection
                             Text(viewModel.userInput)
                                 .font(.system(size: 28, weight: .semibold, design: .monospaced))
                                 .frame(height: 40)
-                            Spacer(minLength: 0)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .topLeading)
-                        .padding(DesignTokens.Spacing.l)
-
-                        VStack {
                             keypad
-                                .frame(maxWidth: 320)
+                                .frame(maxWidth: 280)
                         }
                         .padding(DesignTokens.Spacing.l)
                     }
-                } else {
-                    VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
-                        headerSection
-                        Text(viewModel.problem.question)
-                            .font(.system(size: 36, weight: .bold))
-                            .glow(DesignTokens.Colors.neonBlue, radius: 10)
-                        feedbackIconSection
-                            .frame(height: 60)
-                        Text(viewModel.userInput)
-                            .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                            .frame(height: 40)
-                        keypad
-                            .frame(maxWidth: 280)
-                    }
-                    .padding(DesignTokens.Spacing.l)
                 }
 
                 overlaysSection
@@ -114,40 +123,6 @@ struct GameScene: View {
             .animation(.easeInOut, value: viewModel.comboCount)
             .onAppear { viewModel.startGame() }
         }
-    }
-
-    private var headerSection: some View {
-        HStack {
-            if mode == .timeAttack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Score: \(viewModel.score)")
-                    if let delta = viewModel.scoreDelta {
-                        Text((delta > 0 ? "+\(delta)" : "\(delta)") + "点")
-                            .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
-                    } else {
-                        Text(" ")
-                            .hidden()
-                    }
-                }
-            } else if mode == .noMistake || mode == .correctCount {
-                Text("正解数: \(viewModel.correctCount)")
-            }
-            Spacer()
-            if mode != .noMistake {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("Time: \(viewModel.timeRemaining)")
-                    if let delta = viewModel.timeDelta {
-                        Text((delta > 0 ? "+\(delta)" : "\(delta)") + "秒")
-                            .foregroundColor(delta > 0 ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
-                    } else {
-                        Text(" ")
-                            .hidden()
-                    }
-                }
-            }
-        }
-        .font(DesignTokens.Typography.digitalMono)
-        .padding(.top, DesignTokens.Spacing.s)
     }
 
     private var feedbackIconSection: some View {
@@ -176,24 +151,6 @@ struct GameScene: View {
 
     private var overlaysSection: some View {
         ZStack {
-            if !viewModel.isPaused && countdown == 0 {
-                VStack {
-                    HStack {
-                        Button(action: {
-                            viewModel.pauseGame()
-                            showPauseMenu = true
-                        }) {
-                            Image(systemName: "pause.circle")
-                                .font(DesignTokens.Typography.title)
-                        }
-                        .padding(.top, DesignTokens.Spacing.l)
-                        .padding(.leading, DesignTokens.Spacing.l)
-                        Spacer()
-                    }
-                    Spacer()
-                }
-            }
-
             if showPauseMenu {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
