@@ -4,7 +4,7 @@ struct BackButton: View {
     let title: String
     let action: () -> Void
 
-    init(title: String = "メニュー", action: @escaping () -> Void) {
+    init(title: String = "モード選択に戻る", action: @escaping () -> Void) {
         self.title = title
         self.action = action
     }

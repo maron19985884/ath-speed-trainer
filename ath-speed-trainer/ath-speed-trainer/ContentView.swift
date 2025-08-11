@@ -3,7 +3,7 @@ import SwiftUI
 /// アプリ全体の画面遷移を管理するトップレベルビュー
 struct ContentView: View {
     /// 現在表示中の画面
-    @State private var currentScreen: AppScreen = .modeSelect
+    @State private var currentScreen: AppScreen = .title
 
     /// 選択されたゲームモード
     @State private var selectedMode: GameMode?
@@ -23,6 +23,9 @@ struct ContentView: View {
     var body: some View {
         Group {
             switch currentScreen {
+        case .title:
+            TitleView(currentScreen: $currentScreen)
+
         case .modeSelect:
             ModeSelectView(currentScreen: $currentScreen, selectedMode: $selectedMode)
                 .onChange(of: selectedMode) { _, newValue in

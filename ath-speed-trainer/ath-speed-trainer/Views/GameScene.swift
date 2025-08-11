@@ -183,7 +183,7 @@ struct GameScene: View {
                     .cornerRadius(DesignTokens.Radius.m)
                     .foregroundColor(DesignTokens.Colors.onDark)
 
-                    Button("メニューに戻る") {
+                    Button("モード選択に戻る") {
                         viewModel.stopGame()
                         currentScreen = .modeSelect
                     }

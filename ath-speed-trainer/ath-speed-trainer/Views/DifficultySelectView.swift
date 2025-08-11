@@ -13,10 +13,10 @@ struct DifficultySelectView: View {
         ZStack {
 
             VStack(spacing: 0) {
-                // 左上：メニューへ戻る
+                // 左上：モード選択に戻る
                 HStack {
                     Button(action: { currentScreen = .modeSelect }) {
-                        Text("メニューに戻る")
+                        Text("モード選択に戻る")
                             .font(DesignTokens.Typography.body)
                             .foregroundColor(DesignTokens.Colors.onDark)
                             .padding(DesignTokens.Spacing.s)
