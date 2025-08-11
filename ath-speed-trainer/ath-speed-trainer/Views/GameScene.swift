@@ -245,7 +245,7 @@ struct GameScene: View {
 
         }
         .foregroundColor(DesignTokens.Colors.onDark)
-        .appBackground()
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
         .animation(.easeInOut, value: viewModel.comboCount)
         .onAppear { viewModel.startGame() }
     }

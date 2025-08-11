@@ -139,7 +139,7 @@ struct ResultView: View {
             Spacer()
         }
         .foregroundColor(DesignTokens.Colors.onDark)
-        .appBackground()
+        .background(DesignTokens.Colors.backgroundDark.ignoresSafeArea())
     }
 }
 
