@@ -4,7 +4,7 @@ import SwiftUI
 struct AppBackground: View {
     var body: some View {
         ZStack {
-            Image("kaikei")
+            Image("haikei")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()

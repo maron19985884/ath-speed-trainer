@@ -55,7 +55,7 @@ struct ResultView: View {
     private var modeLabel: String {
         switch mode {
         case .timeAttack: return "タイムアタック"
-        case .correctCount: return "10問正解タイムアタック"
+        case .correctCount: return "10問正解スピード"
         case .noMistake: return "ミス耐久"
         }
     }

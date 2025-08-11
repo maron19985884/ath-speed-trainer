@@ -6,18 +6,18 @@ struct ModeSelectView: View {
 
     var body: some View {
         VStack(spacing: DesignTokens.Spacing.xl) {
-            // タイトル画像を挿入
-            Image("titlelogo") // Assets.xcassets に追加した画像名
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 1600) // 横幅の上限
+
+            // タイトル画像を削除し、見出しテキストに変更
+            Text("モード選択")
+                .font(DesignTokens.Typography.title)
+                .foregroundColor(DesignTokens.Colors.onDark)
+                .glow(DesignTokens.Colors.neonBlue, radius: 8)
                 .padding(.top, DesignTokens.Spacing.xl)
                 .padding(.bottom, DesignTokens.Spacing.l)
 
-
             VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                 modeButton(title: "タイムアタック", mode: .timeAttack)
-                modeButton(title: "10問正解タイムアタック", mode: .correctCount)
+                modeButton(title: "10問正解スピード", mode: .correctCount)
                 modeButton(title: "ミス耐久", mode: .noMistake)
             }
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
@@ -55,35 +55,6 @@ struct ModeSelectView: View {
                 .bold()
         }
         .buttonStyle(HologramButtonStyle())
-    }
-}
-
-/// タイトル専用ビュー（サイズ・ネオン・下線で強調）
-fileprivate struct NeonTitle: View {
-    var body: some View {
-        VStack(spacing: 10) {
-            Text("Ath Speed Trainer")
-                .font(.system(size: 40, weight: .heavy, design: .rounded))
-                .foregroundColor(DesignTokens.Colors.neonBlue)
-                // 発光感を強める二重シャドウ＋カスタムglow
-                .shadow(color: DesignTokens.Colors.neonBlue.opacity(0.6), radius: 12, x: 0, y: 0)
-                .shadow(color: DesignTokens.Colors.neonBlue.opacity(0.3), radius: 24, x: 0, y: 0)
-                .glow(DesignTokens.Colors.neonBlue, radius: 10)
-                .padding(.top, DesignTokens.Spacing.xl)
-
-            // グラデ下線バーで主見出しを固定
-            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
-                .fill(
-                    LinearGradient(
-                        colors: [DesignTokens.Colors.neonBlue, DesignTokens.Colors.neonBlueDeep],
-                        startPoint: .leading, endPoint: .trailing
-                    )
-                )
-                .frame(height: 6)
-                .glow(DesignTokens.Colors.neonBlue, radius: 6)
-                .padding(.horizontal, DesignTokens.Spacing.l)
-        }
-        .padding(.bottom, DesignTokens.Spacing.l)
     }
 }
 
