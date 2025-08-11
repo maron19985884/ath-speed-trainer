@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SettingView: View {
     @Binding var currentScreen: AppScreen
-    @AppStorage("isBgmOn") private var isBgmOn: Bool = true
     @AppStorage("isSeOn") private var isSeOn: Bool = true
     @AppStorage("isVibrationOn") private var isVibrationOn: Bool = true
 
@@ -16,14 +15,6 @@ struct SettingView: View {
                     .underline(true, color: DesignTokens.Colors.neonBlue)
 
                 VStack(spacing: DesignTokens.Spacing.m) {
-                    Toggle("BGM", isOn: $isBgmOn)
-                        .padding()
-                        .background(DesignTokens.Colors.surface)
-                        .cornerRadius(DesignTokens.Radius.m)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
-                                .stroke(DesignTokens.Colors.neonBlue, lineWidth: 1)
-                        )
                     Toggle("効果音（SE）", isOn: $isSeOn)
                         .padding()
                         .background(DesignTokens.Colors.surface)
