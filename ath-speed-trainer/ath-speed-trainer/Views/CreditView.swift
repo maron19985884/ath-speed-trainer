@@ -50,6 +50,10 @@ struct CreditView: View {
         }
         .foregroundColor(DesignTokens.Colors.onDark)
         .appBackground()
+        .safeAreaInset(edge: .bottom) {
+            AdBannerView()
+                .padding(.top, 8)
+        }
     }
 }
 
