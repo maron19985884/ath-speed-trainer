@@ -31,6 +31,10 @@ struct SettingView: View {
         .padding(.vertical, DesignTokens.Spacing.xl)
         .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
         .appBackground()
+        .safeAreaInset(edge: .bottom) {
+            AdBannerView()
+                .padding(.top, 8)
+        }
     }
 }
 

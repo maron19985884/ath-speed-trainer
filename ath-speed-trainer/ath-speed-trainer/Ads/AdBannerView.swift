@@ -1,5 +1,6 @@
 import SwiftUI
 import GoogleMobileAds
+import UIKit
 
 struct AdBannerView: View {
     @State private var height: CGFloat? = nil
@@ -7,6 +8,7 @@ struct AdBannerView: View {
     var body: some View {
         if AdConfig.isAdsEnabled {
             BannerContainer(height: $height)
+                .frame(maxWidth: .infinity)
                 .frame(height: height)
         }
     }
@@ -19,7 +21,7 @@ struct AdBannerView: View {
         }
 
         func makeUIView(context: Context) -> GADBannerView {
-            let size = UIDevice.current.userInterfaceIdiom == .pad ? GADAdSizeLargeBanner : GADAdSizeBanner
+            let size = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width)
             let view = GADBannerView(adSize: size)
             view.adUnitID = AdConfig.bannerUnitID
             view.rootViewController = UIApplication.shared.connectedScenes
@@ -30,7 +32,13 @@ struct AdBannerView: View {
             return view
         }
 
-        func updateUIView(_ uiView: GADBannerView, context: Context) {}
+        func updateUIView(_ uiView: GADBannerView, context: Context) {
+            let size = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width)
+            if uiView.adSize.size.width != size.size.width {
+                uiView.adSize = size
+                uiView.load(GADRequest())
+            }
+        }
 
         final class Coordinator: NSObject, GADBannerViewDelegate {
             private let parent: BannerContainer
