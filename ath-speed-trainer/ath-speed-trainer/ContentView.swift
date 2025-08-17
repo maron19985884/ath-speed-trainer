@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// アプリ全体の画面遷移を管理するトップレベルビュー
 struct ContentView: View {
@@ -59,7 +60,12 @@ struct ContentView: View {
                     correctCount = correct
                     incorrectCount = incorrect ?? 0
                     elapsedTime = time
-                    currentScreen = .result
+                    let root = UIApplication.shared.connectedScenes
+                        .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
+                        .first?.rootViewController
+                    InterstitialAdCoordinator.shared.show(from: root) {
+                        currentScreen = .result
+                    }
                 }
             )
 

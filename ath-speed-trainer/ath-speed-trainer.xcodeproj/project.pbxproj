@@ -4,7 +4,11 @@
 	classes = {
 	};
 	objectVersion = 77;
-	objects = {
+        objects = {
+
+/* Begin PBXBuildFile section */
+                FDF218AAC09F71EE033A223E /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 8045D07908F68CB762A09D88 /* GoogleMobileAds */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		9EEC6E692E3A625D00F1B965 /* PBXContainerItemProxy */ = {
@@ -48,13 +52,14 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9EEC6E582E3A625A00F1B965 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+                9EEC6E582E3A625A00F1B965 /* Frameworks */ = {
+                        isa = PBXFrameworksBuildPhase;
+                        buildActionMask = 2147483647;
+                        files = (
+                                FDF218AAC09F71EE033A223E /* GoogleMobileAds in Frameworks */,
+                        );
+                        runOnlyForDeploymentPostprocessing = 0;
+                };
 		9EEC6E652E3A625D00F1B965 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,16 +112,17 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				9EEC6E5D2E3A625A00F1B965 /* ath-speed-trainer */,
-			);
-			name = "ath-speed-trainer";
-			packageProductDependencies = (
-			);
-			productName = "ath-speed-trainer";
-			productReference = 9EEC6E5B2E3A625A00F1B965 /* ath-speed-trainer.app */;
-			productType = "com.apple.product-type.application";
-		};
+                        fileSystemSynchronizedGroups = (
+                                9EEC6E5D2E3A625A00F1B965 /* ath-speed-trainer */,
+                        );
+                        name = "ath-speed-trainer";
+                        packageProductDependencies = (
+                                8045D07908F68CB762A09D88 /* GoogleMobileAds */,
+                        );
+                        productName = "ath-speed-trainer";
+                        productReference = 9EEC6E5B2E3A625A00F1B965 /* ath-speed-trainer.app */;
+                        productType = "com.apple.product-type.application";
+                };
 		9EEC6E672E3A625D00F1B965 /* ath-speed-trainerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9EEC6E7F2E3A625D00F1B965 /* Build configuration list for PBXNativeTarget "ath-speed-trainerTests" */;
@@ -189,22 +195,25 @@
 			buildConfigurationList = 9EEC6E562E3A625A00F1B965 /* Build configuration list for PBXProject "ath-speed-trainer" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
-			);
-			mainGroup = 9EEC6E522E3A625900F1B965;
-			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 9EEC6E5C2E3A625A00F1B965 /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				9EEC6E5A2E3A625A00F1B965 /* ath-speed-trainer */,
-				9EEC6E672E3A625D00F1B965 /* ath-speed-trainerTests */,
-				9EEC6E712E3A625D00F1B965 /* ath-speed-trainerUITests */,
-			);
-		};
+                        knownRegions = (
+                                en,
+                                Base,
+                        );
+                        mainGroup = 9EEC6E522E3A625900F1B965;
+                        minimizedProjectReferenceProxies = 1;
+                        preferredProjectObjectVersion = 77;
+                        productRefGroup = 9EEC6E5C2E3A625A00F1B965 /* Products */;
+                        projectDirPath = "";
+                        projectRoot = "";
+                        packageReferences = (
+                                9037A1285A80444EFE27A36C /* swift-package-manager-google-mobile-ads */,
+                        );
+                        targets = (
+                                9EEC6E5A2E3A625A00F1B965 /* ath-speed-trainer */,
+                                9EEC6E672E3A625D00F1B965 /* ath-speed-trainerTests */,
+                                9EEC6E712E3A625D00F1B965 /* ath-speed-trainerUITests */,
+                        );
+                };
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -393,16 +402,19 @@
 		9EEC6E7D2E3A625D00F1B965 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G9BUXBTRYK;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+                                ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                                ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+                                CODE_SIGN_STYLE = Automatic;
+                                CURRENT_PROJECT_VERSION = 1;
+                                DEVELOPMENT_TEAM = G9BUXBTRYK;
+                                ENABLE_PREVIEWS = YES;
+                                GENERATE_INFOPLIST_FILE = YES;
+                                GAD_APPLICATION_ID = "ca-app-pub-3940256099942544~1458002511";
+                                INFOPLIST_KEY_GADApplicationIdentifier = "$(GAD_APPLICATION_ID)";
+                                INFOPLIST_KEY_NSUserTrackingUsageDescription = "広告提供のためにデバイス識別子を使用します";
+                                INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+                                INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+                                INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -421,16 +433,19 @@
 		9EEC6E7E2E3A625D00F1B965 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G9BUXBTRYK;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+                                ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                                ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+                                CODE_SIGN_STYLE = Automatic;
+                                CURRENT_PROJECT_VERSION = 1;
+                                DEVELOPMENT_TEAM = G9BUXBTRYK;
+                                ENABLE_PREVIEWS = YES;
+                                GENERATE_INFOPLIST_FILE = YES;
+                                GAD_APPLICATION_ID = "ca-app-pub-XXXXXXXX~YYYYYYYY";
+                                INFOPLIST_KEY_GADApplicationIdentifier = "$(GAD_APPLICATION_ID)";
+                                INFOPLIST_KEY_NSUserTrackingUsageDescription = "広告提供のためにデバイス識別子を使用します";
+                                INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+                                INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+                                INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -548,16 +563,32 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9EEC6E822E3A625D00F1B965 /* Build configuration list for PBXNativeTarget "ath-speed-trainerUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9EEC6E832E3A625D00F1B965 /* Debug */,
-				9EEC6E842E3A625D00F1B965 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
+                9EEC6E822E3A625D00F1B965 /* Build configuration list for PBXNativeTarget "ath-speed-trainerUITests" */ = {
+                        isa = XCConfigurationList;
+                        buildConfigurations = (
+                                9EEC6E832E3A625D00F1B965 /* Debug */,
+                                9EEC6E842E3A625D00F1B965 /* Release */,
+                        );
+                        defaultConfigurationIsVisible = 0;
+                        defaultConfigurationName = Release;
+                };
 /* End XCConfigurationList section */
-	};
-	rootObject = 9EEC6E532E3A625900F1B965 /* Project object */;
+
+/* Begin XCRemoteSwiftPackageReference section */
+                9037A1285A80444EFE27A36C /* swift-package-manager-google-mobile-ads */ = {
+                        isa = XCRemoteSwiftPackageReference;
+                        repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
+                        requirement = { kind = upToNextMajorVersion; minimumVersion = 11.9.0; };
+                };
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+                8045D07908F68CB762A09D88 /* GoogleMobileAds */ = {
+                        isa = XCSwiftPackageProductDependency;
+                        productName = GoogleMobileAds;
+                        package = 9037A1285A80444EFE27A36C /* swift-package-manager-google-mobile-ads */;
+                };
+/* End XCSwiftPackageProductDependency section */
+        };
+        rootObject = 9EEC6E532E3A625900F1B965 /* Project object */;
 }
