@@ -9,7 +9,7 @@ struct CreditView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.l) {
-                    Text("Ath Speed Trainer")
+                    Text("計算スピードゲーム")
                         .font(DesignTokens.Typography.title)
                         .glow(DesignTokens.Colors.neonBlue)
 
@@ -19,22 +19,6 @@ struct CreditView: View {
                         Text("Keita Kobayashi")
                             .font(DesignTokens.Typography.body)
                             .foregroundColor(DesignTokens.Colors.onMuted)
-                    }
-                    .padding()
-                    .background(DesignTokens.Colors.surface)
-                    .cornerRadius(DesignTokens.Radius.m)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: DesignTokens.Radius.m)
-                            .stroke(DesignTokens.Colors.neonBlue, lineWidth: 1)
-                    )
-
-                    VStack(alignment: .leading, spacing: DesignTokens.Spacing.s) {
-                        Text("使用素材")
-                            .font(DesignTokens.Typography.body).bold()
-                        Text("アイコン：Flaticon\n効果音：効果音ラボ")
-                            .font(DesignTokens.Typography.body)
-                            .foregroundColor(DesignTokens.Colors.onMuted)
-                            .multilineTextAlignment(.leading)
                     }
                     .padding()
                     .background(DesignTokens.Colors.surface)

@@ -17,10 +17,7 @@ private struct CyberKeypadButtonStyle: ButtonStyle {
             .cornerRadius(DesignTokens.Radius.m)
             .keycapShadow()
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .glow(
-                DesignTokens.Colors.neonBlue,
-                radius: configuration.isPressed ? 8 : 0
-            )
+            .glow(DesignTokens.Colors.neonBlue, radius: configuration.isPressed ? 8 : 0)
             .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
     }
 }
@@ -45,10 +42,7 @@ private struct CyberEnterButtonStyle: ButtonStyle {
             .cornerRadius(DesignTokens.Radius.m)
             .keycapShadow()
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .glow(
-                DesignTokens.Colors.neonBlue,
-                radius: configuration.isPressed ? 8 : 0
-            )
+            .glow(DesignTokens.Colors.neonBlue, radius: configuration.isPressed ? 8 : 0)
             .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
     }
 }
@@ -68,23 +62,11 @@ struct GameScene: View {
 
     var body: some View {
         GeometryReader { geo in
-            let isLandscape = geo.isLandscape
+            let isLandscape = geo.size.width > geo.size.height
 
             ZStack {
+                // 本体UI（トップバーはsafeAreaInsetで別扱い）
                 VStack(spacing: 0) {
-                    GameTopBar(
-                        mode: mode,
-                        score: viewModel.score,
-                        scoreDelta: viewModel.scoreDelta,
-                        timeRemaining: viewModel.timeRemaining,
-                        timeDelta: viewModel.timeDelta,
-                        correctCount: viewModel.correctCount,
-                        onPause: {
-                            viewModel.pauseGame()
-                            showPauseMenu = true
-                        }
-                    )
-
                     if isLandscape {
                         HStack(alignment: .center, spacing: DesignTokens.Spacing.l) {
                             VStack(spacing: DesignTokens.Spacing.m) {
@@ -119,9 +101,24 @@ struct GameScene: View {
                 overlaysSection
             }
             .foregroundColor(DesignTokens.Colors.onDark)
-            .appBackground()
+            .appBackground() // 背景は安全領域を無視してOK
             .animation(.easeInOut, value: viewModel.comboCount)
             .onAppear { viewModel.startGame() }
+            // ← トップバーはここで安全領域に差し込む
+            .safeAreaInset(edge: .top) {
+                GameTopBar(
+                    mode: mode,
+                    score: viewModel.score,
+                    scoreDelta: viewModel.scoreDelta,
+                    timeRemaining: viewModel.timeRemaining,
+                    timeDelta: viewModel.timeDelta,
+                    correctCount: viewModel.correctCount,   // ← 追加
+                    onPause: {
+                        viewModel.pauseGame()
+                        showPauseMenu = true
+                    }
+                )
+            }
         }
     }
 
@@ -132,8 +129,7 @@ struct GameScene: View {
                     .foregroundColor(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
                     .glow(feedback == .correct ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.neonRed)
             } else {
-                Image(systemName: "checkmark.circle")
-                    .opacity(0)
+                Image(systemName: "checkmark.circle").opacity(0)
             }
         }
         .font(DesignTokens.Typography.digitalMono)
@@ -152,13 +148,10 @@ struct GameScene: View {
     private var overlaysSection: some View {
         ZStack {
             if showPauseMenu {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
+                Color.black.opacity(0.4).ignoresSafeArea()
                 VStack(spacing: DesignTokens.Spacing.m + DesignTokens.Spacing.s) {
                     Button("再開") {
-                        startCountdown {
-                            viewModel.resumeGame()
-                        }
+                        startCountdown { viewModel.resumeGame() }
                     }
                     .font(DesignTokens.Typography.title)
                     .padding(DesignTokens.Spacing.m)
@@ -167,9 +160,7 @@ struct GameScene: View {
                     .foregroundColor(DesignTokens.Colors.onDark)
 
                     Button("リセット") {
-                        startCountdown {
-                            viewModel.startGame()
-                        }
+                        startCountdown { viewModel.startGame() }
                     }
                     .font(DesignTokens.Typography.title)
                     .padding(DesignTokens.Spacing.m)
@@ -197,8 +188,7 @@ struct GameScene: View {
             }
 
             if countdown > 0 {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
+                Color.black.opacity(0.4).ignoresSafeArea()
                 Text("\(countdown)")
                     .font(DesignTokens.Typography.digitalMono)
                     .scaleEffect(2)
@@ -206,17 +196,16 @@ struct GameScene: View {
                     .glow(DesignTokens.Colors.neonPurple)
             }
 
+            // コンボ表示は画面本体の最上部に固定（トップバーとは別層）
             VStack {
                 if viewModel.showCombo {
                     Text("連続\(viewModel.comboCount)問正解！")
                         .font(DesignTokens.Typography.title)
                         .fontWeight(.bold)
                         .foregroundStyle(
-                            LinearGradient(
-                                colors: [.orange, .red],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
+                            LinearGradient(colors: [.orange, .red],
+                                           startPoint: .topLeading,
+                                           endPoint: .bottomTrailing)
                         )
                         .padding(.horizontal, DesignTokens.Spacing.l)
                         .padding(.vertical, DesignTokens.Spacing.s)
@@ -232,7 +221,7 @@ struct GameScene: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.top, DesignTokens.Spacing.xl * 3)
+            .padding(.top, DesignTokens.Spacing.m) // ← トップバーとは独立
             .allowsHitTesting(false)
             .zIndex(2)
             .animation(.easeInOut, value: viewModel.showCombo)
@@ -246,44 +235,33 @@ struct GameScene: View {
                     HStack(spacing: DesignTokens.Spacing.s) {
                         ForEach(1...3, id: \.self) { col in
                             let number = row * 3 + col
-                            Button(action: { viewModel.enterDigit(number) }) {
-                                Text("\(number)")
-                            }
-                            .buttonStyle(CyberKeypadButtonStyle())
-                            .accessibilityLabel(Text("数字\(number)"))
+                            Button(action: { viewModel.enterDigit(number) }) { Text("\(number)") }
+                                .buttonStyle(CyberKeypadButtonStyle())
+                                .accessibilityLabel(Text("数字\(number)"))
                         }
                     }
                 }
                 HStack(spacing: DesignTokens.Spacing.s) {
-                    Button(action: { viewModel.toggleSign() }) {
-                        Text("+/-")
-                    }
-                    .buttonStyle(CyberKeypadButtonStyle())
-                    .accessibilityLabel(Text("符号切替"))
+                    Button(action: { viewModel.toggleSign() }) { Text("+/-") }
+                        .buttonStyle(CyberKeypadButtonStyle())
+                        .accessibilityLabel(Text("符号切替"))
 
-                    Button(action: { viewModel.enterDigit(0) }) {
-                        Text("0")
-                    }
-                    .buttonStyle(CyberKeypadButtonStyle())
-                    .accessibilityLabel(Text("数字0"))
+                    Button(action: { viewModel.enterDigit(0) }) { Text("0") }
+                        .buttonStyle(CyberKeypadButtonStyle())
+                        .accessibilityLabel(Text("数字0"))
 
-                    Button(action: { viewModel.deleteLastDigit() }) {
-                        Image(systemName: "delete.left")
-                    }
-                    .buttonStyle(CyberKeypadButtonStyle())
-                    .accessibilityLabel(Text("削除"))
+                    Button(action: { viewModel.deleteLastDigit() }) { Image(systemName: "delete.left") }
+                        .buttonStyle(CyberKeypadButtonStyle())
+                        .accessibilityLabel(Text("削除"))
                 }
             }
 
-            Button(action: { viewModel.submit() }) {
-                Text("ENTER")
-            }
-            .buttonStyle(CyberEnterButtonStyle())
-            .contentShape(Rectangle())
-            .disabled(viewModel.userInput.isEmpty)
-            .opacity(viewModel.userInput.isEmpty ? 0.4 : 1.0)
-            .accessibilityLabel(Text("決定"))
-
+            Button(action: { viewModel.submit() }) { Text("ENTER") }
+                .buttonStyle(CyberEnterButtonStyle())
+                .contentShape(Rectangle())
+                .disabled(viewModel.userInput.isEmpty)
+                .opacity(viewModel.userInput.isEmpty ? 0.4 : 1.0)
+                .accessibilityLabel(Text("決定"))
         }
     }
 
