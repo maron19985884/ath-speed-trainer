@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Button Style
 struct StartButtonStyle: ButtonStyle {
@@ -194,7 +195,14 @@ struct ResultView: View {
 
             // アクション
             VStack(spacing: DesignTokens.Spacing.m) {
-                Button(action: { currentScreen = .ready }) {
+                Button(action: {
+                    let root = UIApplication.shared.connectedScenes
+                        .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
+                        .first?.rootViewController
+                    InterstitialAdCoordinator.shared.show(from: root) {
+                        currentScreen = .ready
+                    }
+                }) {
                     Text("もう一度プレイ")
                         .font(DesignTokens.Typography.title)
                 }
@@ -236,6 +244,10 @@ struct ResultView: View {
         }
         .foregroundColor(DesignTokens.Colors.onDark)
         .appBackground()
+        .safeAreaInset(edge: .bottom) {
+            AdBannerView()
+                .padding(.top, 8)
+        }
     }
 }
 

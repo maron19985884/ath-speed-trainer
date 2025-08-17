@@ -39,6 +39,10 @@ struct ModeSelectView: View {
             }
             .appBackground()
         }
+        .safeAreaInset(edge: .bottom) {
+            AdBannerView()
+                .padding(.top, 8)
+        }
     }
 
     // モードボタン（大）
