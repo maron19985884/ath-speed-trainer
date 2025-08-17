@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Custom button style used by ResultView
+// MARK: - Button Style
 struct StartButtonStyle: ButtonStyle {
     let enabled: Bool
     func makeBody(configuration: Configuration) -> some View {
@@ -19,12 +19,14 @@ struct StartButtonStyle: ButtonStyle {
     }
 }
 
+// MARK: - Result View
 struct ResultView: View {
     let mode: GameMode
     let score: Int
     let correctCount: Int
     let incorrectCount: Int?
     let time: Int
+
     @Binding var currentScreen: AppScreen
     @State private var highScore: Int? = nil
     @State private var isNewHighScore = false
@@ -32,13 +34,22 @@ struct ResultView: View {
     @State private var scorePulse = false
     @State private var isShareSheetPresented = false
 
-    init(mode: GameMode, score: Int, correctCount: Int, incorrectCount: Int? = nil, time: Int = 0, currentScreen: Binding<AppScreen>) {
+    init(
+        mode: GameMode,
+        score: Int,
+        correctCount: Int,
+        incorrectCount: Int? = nil,
+        time: Int = 0,
+        currentScreen: Binding<AppScreen>
+    ) {
         self.mode = mode
         self.score = score
         self.correctCount = correctCount
         self.incorrectCount = incorrectCount
         self.time = time
         self._currentScreen = currentScreen
+
+        // HighScore 保存（タイムアタックのみ）
         if mode == .timeAttack {
             let saved = UserDefaults.standard.object(forKey: "HighScore") as? Int
             if let saved, saved >= score {
@@ -51,18 +62,16 @@ struct ResultView: View {
         }
     }
 
+    // MARK: - Labels
     private var modeLabel: String {
         switch mode {
-        case .timeAttack: return "タイムアタック"
+        case .timeAttack:   return "タイムアタック"
         case .correctCount: return "10問正解スピード"
-        case .noMistake: return "ミス耐久"
+        case .noMistake:    return "ミス耐久"
         }
     }
 
-    private var shareItems: [Any] {
-        [shareMessage(), AppConstants.appStoreURL]
-    }
-
+    // MARK: - Share message
     private func shareMessage() -> String {
         switch mode {
         case .timeAttack:
@@ -74,14 +83,15 @@ struct ResultView: View {
         }
     }
 
+    // MARK: - Body
     var body: some View {
         VStack(spacing: DesignTokens.Spacing.l) {
             BackButton { currentScreen = .modeSelect }
 
-            // 見出しブロック（強調）
+            // 見出し
             VStack(spacing: DesignTokens.Spacing.s) {
                 Text("結果発表")
-                    .font(.system(size: 36, weight: .heavy)) // ← ひと回り大きく
+                    .font(.system(size: 36, weight: .heavy))
                     .foregroundColor(DesignTokens.Colors.onDark)
                     .overlay(
                         LinearGradient(
@@ -103,12 +113,12 @@ struct ResultView: View {
             }
             .padding(.top, DesignTokens.Spacing.s)
 
-            // コンテンツブロック
+            // コンテンツ
             VStack(spacing: DesignTokens.Spacing.l) {
 
                 switch mode {
                 case .timeAttack:
-                    // スコアを主役に（72pt, 等幅, グロー強）
+                    // スコア強調
                     ZStack(alignment: .topTrailing) {
                         Text(String(format: "SCORE  %03d", score))
                             .font(.system(size: 72, weight: .black, design: .monospaced))
@@ -145,7 +155,7 @@ struct ResultView: View {
                         }
                     }
 
-                    // 詳細（正誤など）
+                    // 詳細
                     VStack(spacing: DesignTokens.Spacing.s) {
                         Text("\(correctCount)問正解")
                         if let incorrectCount {
@@ -171,7 +181,7 @@ struct ResultView: View {
 
                 case .correctCount:
                     Text("時間  \(time) 秒")
-                        .font(.system(size: 40, weight: .heavy)) // → 見出し級に
+                        .font(.system(size: 40, weight: .heavy))
                         .glow(DesignTokens.Colors.neonBlue, radius: 8)
 
                 case .noMistake:
@@ -184,16 +194,19 @@ struct ResultView: View {
 
             // アクション
             VStack(spacing: DesignTokens.Spacing.m) {
-                Button(action: {
-                    currentScreen = .ready
-                }) {
+                Button(action: { currentScreen = .ready }) {
                     Text("もう一度プレイ")
                         .font(DesignTokens.Typography.title)
                 }
                 .buttonStyle(StartButtonStyle(enabled: true))
 
+                // 共有
                 if #available(iOS 16.0, *) {
-                    ShareLink(items: shareItems) {
+                    ShareLink(
+                        item: AppConstants.appStoreURL,      // URL (Transferable)
+                        subject: Text("結果をシェア"),
+                        message: Text(shareMessage())
+                    ) {
                         Text(AppConstants.shareButtonTitle)
                             .font(DesignTokens.Typography.title)
                     }
@@ -213,7 +226,7 @@ struct ResultView: View {
                     .buttonStyle(StartButtonStyle(enabled: true))
                     .accessibilityLabel("結果を共有")
                     .sheet(isPresented: $isShareSheetPresented) {
-                        ShareSheet(activityItems: shareItems)
+                        ShareSheet(activityItems: [shareMessage(), AppConstants.appStoreURL])
                     }
                 }
             }
@@ -226,6 +239,7 @@ struct ResultView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     ResultView(
         mode: .timeAttack,
@@ -236,3 +250,5 @@ struct ResultView: View {
         currentScreen: .constant(.result)
     )
 }
+
+
