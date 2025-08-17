@@ -28,10 +28,6 @@ struct TitleView: View {
         
             currentScreen = .modeSelect
         }
-        .safeAreaInset(edge: .bottom) {
-            AdBannerView()
-                .padding(.top, 8)
-        }
     }
 }
 
