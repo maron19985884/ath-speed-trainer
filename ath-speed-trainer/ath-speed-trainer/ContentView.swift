@@ -60,12 +60,7 @@ struct ContentView: View {
                     correctCount = correct
                     incorrectCount = incorrect ?? 0
                     elapsedTime = time
-                    let root = UIApplication.shared.connectedScenes
-                        .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
-                        .first?.rootViewController
-                    InterstitialAdCoordinator.shared.show(from: root) {
-                        currentScreen = .result
-                    }
+                    currentScreen = .result
                 }
             )
 

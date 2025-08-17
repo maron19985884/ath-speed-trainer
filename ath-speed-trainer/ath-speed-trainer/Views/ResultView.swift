@@ -34,6 +34,8 @@ struct ResultView: View {
     @State private var animateHighScore = false
     @State private var scorePulse = false
     @State private var isShareSheetPresented = false
+    @State private var adScheduled = false
+    @State private var adWorkItem: DispatchWorkItem?
 
     init(
         mode: GameMode,
@@ -196,12 +198,7 @@ struct ResultView: View {
             // アクション
             VStack(spacing: DesignTokens.Spacing.m) {
                 Button(action: {
-                    let root = UIApplication.shared.connectedScenes
-                        .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
-                        .first?.rootViewController
-                    InterstitialAdCoordinator.shared.show(from: root) {
-                        currentScreen = .ready
-                    }
+                    currentScreen = .ready
                 }) {
                     Text("もう一度プレイ")
                         .font(DesignTokens.Typography.title)
@@ -244,6 +241,33 @@ struct ResultView: View {
         }
         .foregroundColor(DesignTokens.Colors.onDark)
         .appBackground()
+        .onAppear {
+            guard !adScheduled else { return }
+            adScheduled = true
+            let work = DispatchWorkItem {
+                #if DEBUG
+                print("ad attempted after 1s")
+                #endif
+                let root = UIApplication.shared.connectedScenes
+                    .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
+                    .first?.rootViewController
+                InterstitialAdCoordinator.shared.show(from: root) {}
+                InterstitialAdCoordinator.shared.preload()
+                adWorkItem = nil
+            }
+            adWorkItem = work
+            #if DEBUG
+            print("ad scheduled")
+            #endif
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: work)
+        }
+        .onDisappear {
+            adWorkItem?.cancel()
+            adWorkItem = nil
+            #if DEBUG
+            print("ad canceled onDisappear")
+            #endif
+        }
         .safeAreaInset(edge: .bottom) {
             AdBannerView()
                 .padding(.top, 8)
