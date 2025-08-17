@@ -30,6 +30,7 @@ struct ResultView: View {
     @State private var isNewHighScore = false
     @State private var animateHighScore = false
     @State private var scorePulse = false
+    @State private var isShareSheetPresented = false
 
     init(mode: GameMode, score: Int, correctCount: Int, incorrectCount: Int? = nil, time: Int = 0, currentScreen: Binding<AppScreen>) {
         self.mode = mode
@@ -55,6 +56,21 @@ struct ResultView: View {
         case .timeAttack: return "タイムアタック"
         case .correctCount: return "10問正解スピード"
         case .noMistake: return "ミス耐久"
+        }
+    }
+
+    private var shareItems: [Any] {
+        [shareMessage(), AppConstants.appStoreURL]
+    }
+
+    private func shareMessage() -> String {
+        switch mode {
+        case .timeAttack:
+            return "タイムアタックで SCORE \(String(format: "%03d", score))！挑戦してみて #計算トレ"
+        case .correctCount:
+            return "\(correctCount)問正解スピード: \(time)秒！ #計算トレ"
+        case .noMistake:
+            return "ミス耐久で \(correctCount)問連続正解！ #計算トレ"
         }
     }
 
@@ -175,6 +191,31 @@ struct ResultView: View {
                         .font(DesignTokens.Typography.title)
                 }
                 .buttonStyle(StartButtonStyle(enabled: true))
+
+                if #available(iOS 16.0, *) {
+                    ShareLink(items: shareItems) {
+                        Text(AppConstants.shareButtonTitle)
+                            .font(DesignTokens.Typography.title)
+                    }
+                    .buttonStyle(StartButtonStyle(enabled: true))
+                    .simultaneousGesture(TapGesture().onEnded {
+                        SEManager.shared.play(.decide)
+                    })
+                    .accessibilityLabel("結果を共有")
+                } else {
+                    Button(action: {
+                        SEManager.shared.play(.decide)
+                        isShareSheetPresented = true
+                    }) {
+                        Text(AppConstants.shareButtonTitle)
+                            .font(DesignTokens.Typography.title)
+                    }
+                    .buttonStyle(StartButtonStyle(enabled: true))
+                    .accessibilityLabel("結果を共有")
+                    .sheet(isPresented: $isShareSheetPresented) {
+                        ShareSheet(activityItems: shareItems)
+                    }
+                }
             }
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
 

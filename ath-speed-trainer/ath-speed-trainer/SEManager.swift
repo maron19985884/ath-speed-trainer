@@ -7,6 +7,7 @@ enum SESound: SystemSoundID {
     case success   = 1322  // Anticipate
     case failure   = 1053  // SIMToolkit NegativeACK
     case finish    = 1054  // SIMToolkit SMSReceived
+    case decide    = 1057  // SIMToolkit CallDrop
 }
 
 final class SEManager {
