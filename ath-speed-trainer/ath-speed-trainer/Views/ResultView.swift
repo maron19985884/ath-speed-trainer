@@ -195,6 +195,11 @@ struct ResultView: View {
             }
             .padding(.horizontal, DesignTokens.Spacing.l)
 
+            // Native square ad between score block and actions
+            NativeSquareAdView()
+                .padding(.top, DesignTokens.Spacing.m)
+                .padding(.bottom, DesignTokens.Spacing.l)
+
             // アクション
             VStack(spacing: DesignTokens.Spacing.m) {
                 Button(action: {
