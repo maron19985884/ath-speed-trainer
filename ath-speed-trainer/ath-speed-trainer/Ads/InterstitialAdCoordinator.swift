@@ -14,7 +14,7 @@ final class InterstitialAdCoordinator: NSObject, GADFullScreenContentDelegate {
         #if DEBUG
         print("Interstitial preload")
         #endif
-        GADInterstitialAd.load(withAdUnitID: AdConfig.interstitialUnitID, request: GADRequest()) { [weak self] ad, error in
+        GADInterstitialAd.load(withAdUnitID: AdConfig.interstitialUnitID, request: AdRequestFactory.make()) { [weak self] ad, error in
             guard let self else { return }
             if let ad = ad {
                 self.interstitial = ad

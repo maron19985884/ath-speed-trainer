@@ -39,7 +39,7 @@ final class NativeAdLoader: NSObject, ObservableObject, GADNativeAdLoaderDelegat
                                  adTypes: [.native],
                                  options: [options])
         loader.delegate = self
-        loader.load(GADRequest())
+        loader.load(AdRequestFactory.make())
         adLoader = loader
 
         #if DEBUG
