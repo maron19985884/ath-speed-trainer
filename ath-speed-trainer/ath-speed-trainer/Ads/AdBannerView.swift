@@ -65,7 +65,7 @@ struct AdBannerView: View {
                 .compactMap { ($0 as? UIWindowScene)?.keyWindow?.rootViewController }
                 .first
             banner.delegate = context.coordinator
-            banner.load(GADRequest())
+            banner.load(AdRequestFactory.make())
             return banner
         }
 
@@ -74,7 +74,7 @@ struct AdBannerView: View {
             let size = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(width)
             if uiView.adSize.size.width != size.size.width {
                 uiView.adSize = size
-                uiView.load(GADRequest())
+                uiView.load(AdRequestFactory.make())
             }
         }
 

@@ -10,6 +10,7 @@ import GoogleMobileAds
 
 @main
 struct ath_speed_trainerApp: App {
+    @Environment(\.scenePhase) private var scenePhase
 
     init() {
         if AdConfig.isAdsEnabled {
@@ -24,6 +25,16 @@ struct ath_speed_trainerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    DispatchQueue.main.async {
+                        TrackingPermissionManager.shared.requestIfNeeded { _ in }
+                    }
+                }
+                .onChange(of: scenePhase) { phase in
+                    if phase == .active {
+                        TrackingPermissionManager.shared.refreshStatus()
+                    }
+                }
         }
     }
 }

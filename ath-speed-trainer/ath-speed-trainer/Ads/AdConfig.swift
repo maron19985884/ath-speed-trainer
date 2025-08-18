@@ -13,4 +13,7 @@ struct AdConfig {
 
     /// インタースティシャルを何回に1回出すか（例: 3 = 3回に1回）
     static let frequencyN = 2
+
+    /// Cached tracking status key
+    static let trackingStatusKey = "trackingAuthorizationStatus"
 }
