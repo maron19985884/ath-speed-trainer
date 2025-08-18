@@ -418,14 +418,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = "３";
 				DEVELOPMENT_TEAM = G9BUXBTRYK;
 				ENABLE_PREVIEWS = YES;
 				GAD_APPLICATION_ID = "ca-app-pub-3940256099942544~1458002511";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ath-speed-trainer/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "計算スピードゲーム";
 				INFOPLIST_KEY_GADApplicationIdentifier = "$(GAD_APPLICATION_ID)";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "広告提供のためにデバイス識別子を使用します";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "広告を表示するためにデバイス識別子を使用します";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -435,7 +436,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kobayashi.ath-speed-trainer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -454,14 +455,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = "３";
 				DEVELOPMENT_TEAM = G9BUXBTRYK;
 				ENABLE_PREVIEWS = YES;
 				GAD_APPLICATION_ID = "ca-app-pub-XXXXXXXX~YYYYYYYY";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ath-speed-trainer/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "計算スピードゲーム";
 				INFOPLIST_KEY_GADApplicationIdentifier = "$(GAD_APPLICATION_ID)";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "広告提供のためにデバイス識別子を使用します";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "広告を表示するためにデバイス識別子を使用します";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -471,7 +473,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kobayashi.ath-speed-trainer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

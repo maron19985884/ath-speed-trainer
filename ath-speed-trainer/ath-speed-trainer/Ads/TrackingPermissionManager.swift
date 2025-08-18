@@ -14,7 +14,7 @@ final class TrackingPermissionManager {
 
     private init() {
         if let value = UserDefaults.standard.object(forKey: AdConfig.trackingStatusKey) as? Int,
-           let cachedStatus = ATTrackingManager.AuthorizationStatus(rawValue: value) {
+           let cachedStatus = ATTrackingManager.AuthorizationStatus(rawValue: UInt(value)) {
             status = cachedStatus
         } else {
             status = ATTrackingManager.trackingAuthorizationStatus
