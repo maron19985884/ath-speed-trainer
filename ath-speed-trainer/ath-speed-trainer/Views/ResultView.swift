@@ -31,11 +31,6 @@ struct ResultView: View {
     @Binding var currentScreen: AppScreen
     @State private var highScore: Int? = nil
     @State private var isNewHighScore = false
-    @State private var animateHighScore = false
-    @State private var scorePulse = false
-    @State private var isShareSheetPresented = false
-    @State private var adScheduled = false
-    @State private var adWorkItem: DispatchWorkItem?
 
     init(
         mode: GameMode,
@@ -74,40 +69,23 @@ struct ResultView: View {
         }
     }
 
-    // MARK: - Share message
-    private func shareMessage() -> String {
-        switch mode {
-        case .timeAttack:
-            return "タイムアタックで SCORE \(String(format: "%03d", score))！挑戦してみて #計算トレ"
-        case .correctCount:
-            return "\(correctCount)問正解スピード: \(time)秒！ #計算トレ"
-        case .noMistake:
-            return "ミス耐久で \(correctCount)問連続正解！ #計算トレ"
-        }
-    }
-
-    // MARK: - Body
     var body: some View {
         VStack(spacing: DesignTokens.Spacing.l) {
             BackButton { currentScreen = .modeSelect }
 
-            // 見出し
+            // 見出し（全モード統一）
             VStack(spacing: DesignTokens.Spacing.s) {
                 Text("結果発表")
-                    .font(.system(size: 36, weight: .heavy))
+                    .font(.system(size: 32, weight: .heavy))
                     .foregroundColor(DesignTokens.Colors.onDark)
                     .overlay(
                         LinearGradient(
                             colors: [DesignTokens.Colors.neonBlue, DesignTokens.Colors.neonBlueDeep],
                             startPoint: .leading, endPoint: .trailing
                         )
-                        .mask(
-                            Rectangle()
-                                .frame(height: 4)
-                                .offset(y: 20)
-                        )
+                        .mask(Rectangle().frame(height: 3).offset(y: 18))
                     )
-                    .glow(DesignTokens.Colors.neonBlue, radius: 10)
+                    .glow(DesignTokens.Colors.neonBlue, radius: 8)
 
                 Text(modeLabel)
                     .font(DesignTokens.Typography.body)
@@ -116,53 +94,37 @@ struct ResultView: View {
             }
             .padding(.top, DesignTokens.Spacing.s)
 
-            // コンテンツ
+            // コンテンツ（全モードでレイアウトトーンを統一）
             VStack(spacing: DesignTokens.Spacing.l) {
-
                 switch mode {
                 case .timeAttack:
-                    // スコア強調
-                    ZStack(alignment: .topTrailing) {
-                        Text(String(format: "SCORE  %03d", score))
-                            .font(.system(size: 72, weight: .black, design: .monospaced))
-                            .foregroundColor(DesignTokens.Colors.onDark)
-                            .glow(DesignTokens.Colors.neonBlue, radius: scorePulse ? 28 : 12)
-                            .scaleEffect(scorePulse ? 1.04 : 1.0)
-                            .animation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true), value: scorePulse)
-                            .onAppear { scorePulse = true }
-                            .minimumScaleFactor(0.5)
-                            .lineLimit(1)
+                    // スコア表示（他モードに合わせてサイズ/余白を統一）
+                    Text("SCORE  \(String(format: "%03d", score))")
+                        .font(.system(size: 40, weight: .heavy, design: .monospaced))
+                        .foregroundColor(DesignTokens.Colors.onDark)
+                        .glow(DesignTokens.Colors.neonBlue, radius: 8)
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
 
-                        if isNewHighScore {
-                            HStack(spacing: 6) {
-                                Image(systemName: "trophy.fill")
-                                Text("NEW RECORD")
-                            }
-                            .font(.system(size: 14, weight: .semibold))
-                            .padding(.horizontal, 10).padding(.vertical, 6)
-                            .background(DesignTokens.Colors.neonGreen.opacity(0.15))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(DesignTokens.Colors.neonGreen.opacity(0.6), lineWidth: 1)
-                            )
-                            .cornerRadius(10)
-                            .foregroundColor(DesignTokens.Colors.neonGreen)
-                            .offset(x: 4, y: -8)
-                            .transition(.scale)
-                            .onAppear {
-                                animateHighScore = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                                    animateHighScore = false
-                                }
+                    // 詳細カード（正誤・ハイスコア）
+                    VStack(spacing: DesignTokens.Spacing.s) {
+                        HStack {
+                            Text("\(correctCount)問正解")
+                            if let incorrectCount {
+                                Text("／ \(incorrectCount)問不正解")
                             }
                         }
-                    }
-
-                    // 詳細
-                    VStack(spacing: DesignTokens.Spacing.s) {
-                        Text("\(correctCount)問正解")
-                        if let incorrectCount {
-                            Text("\(incorrectCount)問不正解")
+                        if let highScore {
+                            HStack(spacing: 6) {
+                                Text("HIGH SCORE: \(String(format: "%03d", highScore))")
+                                if isNewHighScore {
+                                    Text("NEW!")
+                                        .padding(.horizontal, 6).padding(.vertical, 2)
+                                        .background(DesignTokens.Colors.neonGreen.opacity(0.15))
+                                        .cornerRadius(6)
+                                        .foregroundColor(DesignTokens.Colors.neonGreen)
+                                }
+                            }
                         }
                     }
                     .font(DesignTokens.Typography.body)
@@ -174,13 +136,6 @@ struct ResultView: View {
                         RoundedRectangle(cornerRadius: DesignTokens.Radius.l)
                             .stroke(DesignTokens.Colors.onMuted.opacity(0.3), lineWidth: 1)
                     )
-
-                    if let highScore {
-                        Text("HIGH SCORE  \(String(format: "%03d", highScore))")
-                            .font(.system(size: 18, weight: .semibold, design: .monospaced))
-                            .foregroundColor(DesignTokens.Colors.onDark)
-                            .padding(.top, DesignTokens.Spacing.s)
-                    }
 
                 case .correctCount:
                     Text("時間  \(time) 秒")
@@ -195,25 +150,25 @@ struct ResultView: View {
             }
             .padding(.horizontal, DesignTokens.Spacing.l)
 
-            // Native square ad between score block and actions
-            NativeSquareAdView()
-                .padding(.top, DesignTokens.Spacing.m)
-                .padding(.bottom, DesignTokens.Spacing.l)
-
-            // アクション
+            // アクション（全モード共通の並び・間隔）
             VStack(spacing: DesignTokens.Spacing.m) {
                 Button(action: {
-                    currentScreen = .ready
+                    let root = UIApplication.shared.connectedScenes
+                        .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
+                        .first?.rootViewController
+                    // インタースティシャルは ResultView 側のポリシーに合わせて
+                    InterstitialAdCoordinator.shared.show(from: root) {
+                        currentScreen = .ready
+                    }
                 }) {
                     Text("もう一度プレイ")
                         .font(DesignTokens.Typography.title)
                 }
                 .buttonStyle(StartButtonStyle(enabled: true))
 
-                // 共有
                 if #available(iOS 16.0, *) {
                     ShareLink(
-                        item: AppConstants.appStoreURL,      // URL (Transferable)
+                        item: AppConstants.appStoreURL,
                         subject: Text("結果をシェア"),
                         message: Text(shareMessage())
                     ) {
@@ -222,22 +177,24 @@ struct ResultView: View {
                     }
                     .buttonStyle(StartButtonStyle(enabled: true))
                     .simultaneousGesture(TapGesture().onEnded {
-                        SEManager.shared.play(.decide)
                     })
                     .accessibilityLabel("結果を共有")
                 } else {
                     Button(action: {
-                        SEManager.shared.play(.decide)
-                        isShareSheetPresented = true
+                        let activity = UIActivityViewController(
+                            activityItems: [shareMessage(), AppConstants.appStoreURL],
+                            applicationActivities: nil
+                        )
+                        UIApplication.shared.connectedScenes
+                            .compactMap { ($0 as? UIWindowScene)?.keyWindow?.rootViewController }
+                            .first?
+                            .present(activity, animated: true)
                     }) {
                         Text(AppConstants.shareButtonTitle)
                             .font(DesignTokens.Typography.title)
                     }
                     .buttonStyle(StartButtonStyle(enabled: true))
                     .accessibilityLabel("結果を共有")
-                    .sheet(isPresented: $isShareSheetPresented) {
-                        ShareSheet(activityItems: [shareMessage(), AppConstants.appStoreURL])
-                    }
                 }
             }
             .padding(.horizontal, DesignTokens.Spacing.l + DesignTokens.Spacing.xl)
@@ -246,36 +203,20 @@ struct ResultView: View {
         }
         .foregroundColor(DesignTokens.Colors.onDark)
         .appBackground()
-        .onAppear {
-            guard !adScheduled else { return }
-            adScheduled = true
-            let work = DispatchWorkItem {
-                #if DEBUG
-                print("ad attempted after 1s")
-                #endif
-                let root = UIApplication.shared.connectedScenes
-                    .compactMap { ($0 as? UIWindowScene)?.windows.first { $0.isKeyWindow } }
-                    .first?.rootViewController
-                InterstitialAdCoordinator.shared.show(from: root) {}
-                InterstitialAdCoordinator.shared.preload()
-                adWorkItem = nil
-            }
-            adWorkItem = work
-            #if DEBUG
-            print("ad scheduled")
-            #endif
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: work)
-        }
-        .onDisappear {
-            adWorkItem?.cancel()
-            adWorkItem = nil
-            #if DEBUG
-            print("ad canceled onDisappear")
-            #endif
-        }
         .safeAreaInset(edge: .bottom) {
-            AdBannerView()
-                .padding(.top, 8)
+            AdBannerView().padding(.top, 8)
+        }
+    }
+
+    // MARK: - Share message
+    private func shareMessage() -> String {
+        switch mode {
+        case .timeAttack:
+            return "タイムアタックで SCORE \(String(format: "%03d", score))！挑戦してみて #計算トレ"
+        case .correctCount:
+            return "\(correctCount)問正解スピード: \(time)秒！ #計算トレ"
+        case .noMistake:
+            return "ミス耐久で \(correctCount)問連続正解！ #計算トレ"
         }
     }
 }
@@ -291,5 +232,3 @@ struct ResultView: View {
         currentScreen: .constant(.result)
     )
 }
-
-
